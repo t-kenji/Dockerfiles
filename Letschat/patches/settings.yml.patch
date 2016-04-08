@@ -1,0 +1,38 @@
+--- settings.yml.sample	2016-04-08 15:27:25.000000000 +0900
++++ settings.yml	2016-04-09 00:06:57.348348791 +0900
+@@ -8,7 +8,7 @@
+ 
+ http:
+   enable: true
+-  host: 'localhost'
++  host: '0.0.0.0'
+   port: 5000
+ 
+ https:
+@@ -22,6 +22,7 @@
+   provider: local
+   local:
+     dir: uploads
++  restrictTypes: false
+ 
+ xmpp:
+   enable: false
+@@ -38,3 +39,18 @@
+   providers: [local]
+   local:
+     enableRegistration: true
++
++giphy:
++  enable: false
++
++i18n:
++  locale: ja
++
++rooms:
++  private: true
++
++notifications:
++  mentionedOnly: true
++
++avatars:
++  providers: [initials]
