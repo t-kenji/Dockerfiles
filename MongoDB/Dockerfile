@@ -9,9 +9,9 @@ FROM ubuntu:14.04
 MAINTAINER tkenji <protect.2501@gmail.com>
 
 # Set environment variables.
-ENV USER=mongo \
-    HOME=/home/$USER \
-    DEBIAN_FRONTEND=noninteractive
+ENV USER=mongo
+ENV HOME=/home/$USER
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install packages.
 RUN sed -i -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' /etc/apt/sources.list && \
