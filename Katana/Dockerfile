@@ -12,6 +12,8 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 ENV USER=katana
 ENV HOME=/home/$USER
 ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'Asia/Tokyo' > /etc/timezone && \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
 # Install packages.
 RUN sed -i -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' /etc/apt/sources.list && \
@@ -45,14 +47,10 @@ RUN apt-get update && \
 # Create user.
 RUN useradd -d $HOME -m -s /bin/bash $USER && \
     echo "$USER:$USER" | chpasswd && \
-    echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
-    echo "Asia/Tokyo" > /etc/timezone
+    echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Define working directory.
 WORKDIR $HOME
-
-# Setup vim.
-COPY config/_vimrc $HOME/.vimrc
 
 # Install Buildbot.
 RUN pwd && ls && echo $HOME
@@ -92,7 +90,7 @@ directory=/var/lib/buildbot/slave\n\
 user=katana\n\
 " > /etc/supervisor/conf.d/buildbot.conf
 
-# Expose port.
+# Port forwarding target.
 EXPOSE 8010
 
 # Define default command.

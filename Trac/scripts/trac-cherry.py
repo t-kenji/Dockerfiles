@@ -28,7 +28,7 @@ project_port = 8000
 
 def application(environ, start_request):
     if not 'trac.env_parent_dir' in environ:
-        environ.setdefault('trac.env_path', '/opt/trac/sites/{}'.format(project_name))
+        environ.setdefault('trac.env_path', '/var/lib/trac/sites/{}'.format(project_name))
     if 'PYTHON_EGG_CACHE' in environ:
         os.environ['PYTHON_EGG_CACHE'] = environ['PYTHON_EGG_CACHE']
     elif 'trac.env_path' in environ:

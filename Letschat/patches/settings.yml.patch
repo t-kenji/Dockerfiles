@@ -1,5 +1,5 @@
 --- settings.yml.sample	2016-04-08 15:27:25.000000000 +0900
-+++ settings.yml	2016-04-09 00:06:57.348348791 +0900
++++ settings.yml	2016-04-16 17:30:15.083266636 +0900
 @@ -8,7 +8,7 @@
  
  http:
@@ -9,14 +9,24 @@
    port: 5000
  
  https:
-@@ -22,6 +22,7 @@
+@@ -22,14 +22,15 @@
    provider: local
    local:
      dir: uploads
 +  restrictTypes: false
  
  xmpp:
-   enable: false
+-  enable: false
++  enable: true
+   port: 5222
+   domain: example.com
+ 
+ database:
+-  uri: mongodb://localhost/letschat
++  uri: mongodb://db/letschat
+ 
+ secrets:
+   cookie: secretsauce
 @@ -38,3 +39,18 @@
    providers: [local]
    local:

@@ -12,6 +12,8 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 ENV USER=trac
 ENV HOME=/home/$USER
 ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'Asia/Tokyo' > /etc/timezone && \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
 # Install packages.
 RUN sed -i -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' /etc/apt/sources.list && \
@@ -43,8 +45,7 @@ RUN apt-get update && \
 # Create user.
 RUN useradd -d /home/$USER -m -s /bin/bash $USER && \
     echo "$USER:$USER" | chpasswd && \
-    echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
-    echo "Asia/Tokyo" > /etc/timezone
+    echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Define working directory.
 WORKDIR $HOME
@@ -64,8 +65,8 @@ RUN /opt/venv/trac/bin/pip install Genshi && \
     /opt/venv/trac/bin/pip install ./trac
 RUN /opt/venv/trac/bin/pip install requests && \
     /opt/venv/trac/bin/pip install CherryPy
-RUN mkdir -p /opt/trac/sites && \
-    mkdir -p /opt/trac/deploy
+RUN mkdir -p /var/lib/trac/sites && \
+    mkdir -p /var/lib/trac/deploy
 COPY scripts/trac-cherry.py ./
 
 # Install trac plugins.

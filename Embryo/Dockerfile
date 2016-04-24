@@ -12,71 +12,72 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 ENV USER=embryo
 ENV HOME=/home/$USER
 ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'Asia/Tokyo' > /etc/timezone && \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
 # Install packages.
 RUN sed -i -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' /etc/apt/sources.list && \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y python-software-properties \
-                                                      software-properties-common
+    apt-get install -y python-software-properties \
+                       software-properties-common
 RUN add-apt-repository -y ppa:git-core/ppa && \
     add-apt-repository -y ppa:mercurial-ppa/releases && \
     add-apt-repository -y ppa:webupd8team/java
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y automake \
-                                                      binutils-dev \
-                                                      build-essential \
-                                                      byobu \
-                                                      curl \
-                                                      git \
-                                                      git-svn \
-                                                      graphviz \
-                                                      haskell-platform \
-                                                      libcurl4-openssl-dev \
-                                                      libedit2 \
-                                                      libedit-dev \
-                                                      libffi-dev \
-                                                      liblzma-dev \
-                                                      libncurses5-dev \
-                                                      libpcre3-dev \
-                                                      libpython2.7 \
-                                                      libpython2.7-dev \
-                                                      libreadline-dev \
-                                                      libsqlite3-dev \
-                                                      libssl-dev \
-                                                      libtool \
-                                                      libxml2-dev \
-                                                      libxslt1-dev \
-                                                      libyaml-dev \
-                                                      mercurial \
-                                                      openssh-server \
-                                                      oracle-java8-installer \
-                                                      pkg-config \
-                                                      python-dev \
-                                                      python-setuptools \
-                                                      python-pip \
-                                                      python-virtualenv \
-                                                      sqlite3 \
-                                                      swig \
-                                                      unzip \
-                                                      vim-nox \
-                                                      wget\
-                                                      zlib1g-dev
+    apt-get upgrade -y && \
+    apt-get install -y automake \
+                       binutils-dev \
+                       build-essential \
+                       byobu \
+                       curl \
+                       git \
+                       git-svn \
+                       graphviz \
+                       haskell-platform \
+                       libcurl4-openssl-dev \
+                       libedit2 \
+                       libedit-dev \
+                       libffi-dev \
+                       liblzma-dev \
+                       libncurses5-dev \
+                       libpcre3-dev \
+                       libpython2.7 \
+                       libpython2.7-dev \
+                       libreadline-dev \
+                       libsqlite3-dev \
+                       libssl-dev \
+                       libtool \
+                       libxml2-dev \
+                       libxslt1-dev \
+                       libyaml-dev \
+                       mercurial \
+                       openssh-server \
+                       oracle-java8-installer \
+                       pkg-config \
+                       python-dev \
+                       python-setuptools \
+                       python-pip \
+                       python-virtualenv \
+                       sqlite3 \
+                       supervisor \
+                       swig \
+                       unzip \
+                       vim-nox \
+                       wget\
+                       zlib1g-dev
 RUN curl -Lo /tmp/subversion_installer.sh http://opensource.wandisco.com/1.9/scripts/subversion_installer_1.9.sh && \
     echo yn | bash /tmp/subversion_installer.sh && \
     rm /tmp/subversion_installer.sh
 RUN update-java-alternatives -s java-8-oracle
 
-
 # Create user.
-RUN useradd -d /home/$USER -m -s /bin/bash $USER && \
-    echo "$USER:$USER' | chpasswd && \
+RUN useradd -d $HOME -m -s /bin/bash $USER && \
+    echo "$USER:$USER" | chpasswd && \
     echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     echo 'LANG="ja_JP.UTF-8"' > /etc/default/local && \
     locale-gen ja_JP.UTF-8 && \
-    dpkg-reconfigure locales && \
-    echo 'Asia/Tokyo' > /etc/timezone
+    dpkg-reconfigure locales
 
 # Setup sshd.
 RUN sed -i -e '/^UsePAM\s+yes/d' /etc/ssh/sshd_config && \
