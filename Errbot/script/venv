@@ -1,0 +1,3 @@
+venv_dir="${1:-venv}"
+pyvenv-3.6 "${venv_dir}"
+source "${venv_dir}/bin/activate"
