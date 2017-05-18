@@ -20,8 +20,10 @@ RUN apk add --no-cache \
             git \
             git-svn \
             libffi-dev \
+            logrotate \
             mercurial \
             postgresql-dev \
+            supervisor \
             $NULL
 RUN apk add --no-cache \
             vim \
@@ -30,25 +32,28 @@ RUN apk add --no-cache \
 
 # Workaround for pyparsing install error.
 # http://stackoverflow.com/questions/42029545/pip-is-error-typeerror-call-takes-exactly-2-arguments-1-given
-RUN pip install --upgrade \
-                --no-cache-dir \
-                setuptools==33.1.1 \
-                $NULL
+#RUN pip install --upgrade \
+#                --no-cache-dir \
+#                setuptools==33.1.1 \
+#                $NULL
 
 RUN pip install --no-cache-dir \
-                psycopg2 \
-                supervisor \
                 virtualenv \
                 $NULL
 
 # Define working directory.
 WORKDIR $HOME
 
-COPY script/entrypoint.sh /
+COPY script/docker-entrypoint.sh /
+
+# setup supervisor
+RUN mkdir -p /etc/supervisor.d
+COPY conf/supervisor/kallithea.ini /etc/supervisor.d/
+COPY conf/logrotate/supervisor /etc/logrotate.d/
 
 # Port forwarding target.
 EXPOSE 5010
 
 # Define default command.
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/bash"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-n"]
