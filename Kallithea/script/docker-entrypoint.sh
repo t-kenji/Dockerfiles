@@ -25,7 +25,7 @@ else:
 	sys.setdefaultencoding('utf-8')
 __EOS__
 	cd kallithea-mirror
-	../venv/bin/pip install setuptools==33.1.1 Babel==1.3 psycopg2
+	../venv/bin/pip install setuptools==33.1.1 Babel==1.3 psycopg2 sqlalchemy-migrate
 	../venv/bin/python setup.py compile_catalog
 	../venv/bin/pip install .
 	cd -

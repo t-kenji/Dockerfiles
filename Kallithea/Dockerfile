@@ -30,13 +30,6 @@ RUN apk add --no-cache \
             bash \
             $NULL
 
-# Workaround for pyparsing install error.
-# http://stackoverflow.com/questions/42029545/pip-is-error-typeerror-call-takes-exactly-2-arguments-1-given
-#RUN pip install --upgrade \
-#                --no-cache-dir \
-#                setuptools==33.1.1 \
-#                $NULL
-
 RUN pip install --no-cache-dir \
                 virtualenv \
                 $NULL
