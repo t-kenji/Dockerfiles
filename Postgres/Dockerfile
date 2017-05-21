@@ -16,11 +16,12 @@ ENV PGDATA=/var/lib/postgresql/data
 VOLUME /var/lib/postgresql/data
 
 RUN apk update
-
 RUN apk add --no-cache \
             vim \
             bash \
             $NULL
+
+COPY script/initdb.d/*.sh /docker-entrypoint-initdb.d/
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
