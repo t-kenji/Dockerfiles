@@ -10,6 +10,11 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 
 # Set environment variables.
 ENV HOME=/root
+ENV LANG=en_US.utf8
+ENV RCDATA=/var/lib/kallithea/data
+
+# Set data volume.
+VOLUME $RCDATA
 
 # Install packages.
 RUN apk update
@@ -39,7 +44,7 @@ WORKDIR $HOME
 
 COPY script/docker-entrypoint.sh /
 
-# setup supervisor
+# Setup supervisor
 RUN mkdir -p /etc/supervisor.d
 COPY conf/supervisor/kallithea.ini /etc/supervisor.d/
 COPY conf/logrotate/supervisor /etc/logrotate.d/

@@ -1,10 +1,13 @@
 #!/bin/bash
 
+NAME=kallithea
+MOUNT_POINT=${HOME}/.docker-containers/volumes/${NAME}
+
 docker run -ti \
            -d \
-           --name kallithea \
-           --link postgres:db \
+           --name ${NAME} \
            -p 5010:5010 \
-           -v `pwd`/home:/root \
-           tkenji/kallithea \
+           --link postgres:db \
+           -v ${MOUNT_POINT}/data:/var/lib/kallithea/data \
+           tkenji/${NAME} \
            $@

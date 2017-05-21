@@ -33,16 +33,16 @@ else
 	echo "[INFO] venv already exists."
 fi
 
-if [ ! -d data ]; then
-	mkdir data
-	./venv/bin/paster make-config kallithea data/production.ini
-	ln -s ../kallithea-rcextensions/rcextentions data/
-	sed -i "s/host = 127.0.0.1/host = 0.0.0.0/" data/production.ini
-	sed -i "s/port = 5000/port = 5010/" data/production.ini
-	sed -i "s/lang =\( en\)*/lang = ja/" data/production.ini
-	sed -i "s/default_encoding = utf8/default_encoding = utf8, cp932/" data/production.ini
-	sed -i "s/sqlalchemy.db1.url = sqlite:/#sqlalchemy.db1.url = sqlite:/" data/production.ini
-	sed -i "s/#sqlalchemy.db1.url = postgresql:\/\/user:pass@localhost/sqlalchemy.db1.url = postgresql:\/\/kallithea@db/" data/production.ini
+if [ ! -e $RCDATA/production.ini ]; then
+	mkdir -p $RCDATA
+	./venv/bin/paster make-config kallithea $RCDATA/production.ini
+	ln -s ../kallithea-rcextensions/rcextentions $RCDATA/
+	sed -i "s/host = 127.0.0.1/host = 0.0.0.0/" $RCDATA/production.ini
+	sed -i "s/port = 5000/port = 5010/" $RCDATA/production.ini
+	sed -i "s/lang =\( en\)*/lang = ja/" $RCDATA/production.ini
+	sed -i "s/default_encoding = utf8/default_encoding = utf8, cp932/" $RCDATA/production.ini
+	sed -i "s/sqlalchemy.db1.url = sqlite:/#sqlalchemy.db1.url = sqlite:/" $RCDATA/production.ini
+	sed -i "s/#sqlalchemy.db1.url = postgresql:\/\/user:pass@localhost/sqlalchemy.db1.url = postgresql:\/\/kallithea@db/" $RCDATA/production.ini
 fi
 
 exec $@
