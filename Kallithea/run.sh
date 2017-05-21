@@ -3,8 +3,7 @@
 NAME=kallithea
 MOUNT_POINT=${HOME}/.docker-containers/volumes/${NAME}
 
-docker run -ti \
-           -d \
+docker run -d \
            --name ${NAME} \
            -p 5010:5010 \
            --link postgres:db \
