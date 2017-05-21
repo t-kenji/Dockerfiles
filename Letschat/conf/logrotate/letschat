@@ -1,0 +1,6 @@
+/var/log/*.log {
+	missingok
+	weekly
+	notifempty
+	nocompress
+}
