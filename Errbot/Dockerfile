@@ -3,35 +3,44 @@
 #
 
 # Pull base image.
-FROM python:3.6.0-alpine
+FROM python:3.6-alpine
 
 # Author.
 MAINTAINER tkenji <protect.2501@gmail.com>
 
 # Set environment variables.
 ENV HOME=/root
+ENV LANG=en_US.utf8
+ENV BOTDATA=/var/lib/errbot/data
 
+# Set data volume.
+VOLUME $BOTDATA
+
+# Install packages.
 RUN apk update
-
 RUN apk add --no-cache \
             gcc \
             g++ \
+            git \
             libffi-dev \
             openssl-dev \
+            supervisor \
             $NULL
-
 RUN apk add --no-cache \
-            git \
             vim \
             bash \
             $NULL
 
+# Define working directory.
 WORKDIR $HOME
 
-RUN mkdir -p script
-COPY script/venv script/venv
+COPY script/docker-entrypoint.sh /
 
-RUN pyvenv-3.6 errbot-venv
-RUN errbot-venv/bin/pip install errbot socketio-client pytz crontab
+# Setup supervisor
+RUN mkdir -p /etc/supervisor.d
+COPY conf/supervisor/errbot.ini /etc/supervisor.d/
+COPY conf/logrotate/supervisor /etc/logrotate.d/
 
-ENTRYPOINT ["/bin/bash"]
+# Define default command.
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-n"]
