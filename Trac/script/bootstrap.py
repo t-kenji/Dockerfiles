@@ -1,4 +1,4 @@
-#!/opt/venv/trac/bin/python
+#!/root/venv/bin/python
 # -*- coding: utf-8 -*-
 #
 # Copyright (C)2008-2009 Edgewall Software
@@ -16,19 +16,16 @@
 # Author: Noah Kantrowitz <noah@coderanger.net>
 
 # Activate virtual environment
-activate_this = '/opt/venv/trac/bin/activate_this.py'
+activate_this = '/root/venv/bin/activate_this.py'
 execfile(activate_this, dict(__file__=activate_this))
 
 import os
 import argparse
 import cherrypy
 
-project_name = ""
-project_port = 8000
-
 def application(environ, start_request):
     if not 'trac.env_parent_dir' in environ:
-        environ.setdefault('trac.env_path', '/var/lib/trac/sites/{}'.format(project_name))
+        environ.setdefault('trac.env_path', '/var/lib/trac/sites/{}'.format(os.environ.get('TRAC_PROJECT_NAME', '')))
     if 'PYTHON_EGG_CACHE' in environ:
         os.environ['PYTHON_EGG_CACHE'] = environ['PYTHON_EGG_CACHE']
     elif 'trac.env_path' in environ:
@@ -40,17 +37,17 @@ def application(environ, start_request):
     from trac.web.main import dispatch_request
     return dispatch_request(environ, start_request)
 
-if __name__ == '__main__':
-
+def main():
     # Parse cmdline arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('project_name')
     parser.add_argument('project_port')
     args = parser.parse_args()
+    os.environ['TRAC_PROJECT_NAME'] = args.project_name
+    os.environ['TRAC_PROJECT_PORT'] = args.project_port
 
     # Mount the application
-    project_name = args.project_name
-    cherrypy.tree.graft(application, '/{}'.format(project_name))
+    cherrypy.tree.graft(application, '/{}'.format(os.environ.get('TRAC_PROJECT_NAME', '')))
 
     # Unsubscribe the default server
     cherrypy.server.unsubscribe()
@@ -61,7 +58,7 @@ if __name__ == '__main__':
     # Configure the server object
     #server.socket_host = "127.0.0.1"
     server.socket_host = "0.0.0.0"
-    server.socket_port = int(args.project_port)
+    server.socket_port = int(os.environ.get('TRAC_PROJECT_PORT', '8000'))
     server.thread_pool = 3
 
     # Subscribe this server
@@ -70,3 +67,6 @@ if __name__ == '__main__':
     # Start the server engine (Option 1 *and* 2)
     cherrypy.engine.start()
     cherrypy.engine.block()
+
+if __name__ == '__main__':
+    main()
