@@ -45,4 +45,4 @@ if [ ! -e $RCDATA/production.ini ]; then
 	sed -i "s/#sqlalchemy.db1.url = postgresql:\/\/user:pass@localhost/sqlalchemy.db1.url = postgresql:\/\/kallithea@db/" $RCDATA/production.ini
 fi
 
-exec $@
+exec "$@"

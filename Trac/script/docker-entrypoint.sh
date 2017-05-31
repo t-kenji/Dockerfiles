@@ -61,4 +61,4 @@ if [ ! -d /var/lib/trac/deploy ]; then
 	./venv/bin/trac-admin /var/lib/trac/sites/trac-plugin-test deploy /var/lib/trac/deploy
 fi
 
-exec $@
+exec "$@"

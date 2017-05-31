@@ -2,4 +2,4 @@
 
 sudo chown jenkins:jenkins -R ~/
 
-exec $@
+exec "$@"

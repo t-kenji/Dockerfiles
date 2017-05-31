@@ -17,4 +17,4 @@ else
 	echo "[INFO] venv already exists."
 fi
 
-exec $@
+exec "$@"

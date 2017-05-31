@@ -2,4 +2,4 @@
 
 cd $HOME
 
-exec $@
+exec "$@"

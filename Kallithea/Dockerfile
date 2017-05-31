@@ -46,7 +46,7 @@ COPY script/docker-entrypoint.sh /
 
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d
-COPY conf/supervisor/kallithea.ini /etc/supervisor.d/
+COPY conf/supervisor/*.ini /etc/supervisor.d/
 COPY conf/logrotate/supervisor /etc/logrotate.d/
 
 # Port forwarding target.

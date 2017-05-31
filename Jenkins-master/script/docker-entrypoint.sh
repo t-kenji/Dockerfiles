@@ -7,4 +7,4 @@ if [ ! -d $JENKINS_HOME/.ssh ]; then
 	chown jenkins:jenkins -R $JENKINS_HOME
 fi
 
-exec $@
+exec "$@"

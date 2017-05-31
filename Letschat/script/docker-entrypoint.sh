@@ -10,4 +10,4 @@ if [ ! -d lets-chat ]; then
 	npm install
 fi
 
-exec $@
+exec "$@"
