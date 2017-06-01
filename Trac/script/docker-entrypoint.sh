@@ -65,6 +65,8 @@ SITES_DIR=/var/lib/trac/sites
 if [ ! -d $SITES_DIR ]; then
 	mkdir -p $SITES_DIR
 	trac-admin $SITES_DIR/trac-project-sample initenv sample sqlite:db/trac.db
+	sed -i 's/^base_url = $/base_url = http:\/\/<<server>>\/trac/trac-project-sample' $SITES_DIR/trac-project-sample/conf/trac.ini
+	sed -i 's/^use_base_url_for_redirect = disabled$/use_base_url_for_redirect = enabled/' $SITES_DIR/trac-project-sample/conf/trac.ini
 	echo "trac-project-sample:8001" >> $SITES_DIR/servers.txt
 fi
 

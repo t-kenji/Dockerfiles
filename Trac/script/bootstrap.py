@@ -47,7 +47,7 @@ def main():
     os.environ['TRAC_PROJECT_PORT'] = args.project_port
 
     # Mount the application
-    cherrypy.tree.graft(application, '/{}'.format(os.environ.get('TRAC_PROJECT_NAME', '')))
+    cherrypy.tree.graft(application, '/trac/{}'.format(os.environ.get('TRAC_PROJECT_NAME', '')))
 
     # Unsubscribe the default server
     cherrypy.server.unsubscribe()

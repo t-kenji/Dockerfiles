@@ -39,6 +39,10 @@ if [ ! -e $RCDATA/production.ini ]; then
 	ln -s ../kallithea-rcextensions/rcextentions $RCDATA/
 	sed -i "s/host = 127.0.0.1/host = 0.0.0.0/" $RCDATA/production.ini
 	sed -i "s/port = 5000/port = 5010/" $RCDATA/production.ini
+	sed -i "s/^#\(\[filter:proxy-prefix\]\)$/\1/" $RCDATA/production.ini
+	sed -i "s/^#\(use = egg:PasteDeploy#prefix\)$/\1/" $RCDATA/production.ini
+	sed -i "s/^#prefix = \/<your-prefix>$/prefix = \/kallithea/" $RCDATA/production.ini
+	sed -i "s/^#\(filter-with = proxy-prefix\)/\1/" $RCDATA/production.ini
 	sed -i "s/lang =\( en\)*/lang = ja/" $RCDATA/production.ini
 	sed -i "s/default_encoding = utf8/default_encoding = utf8, cp932/" $RCDATA/production.ini
 	sed -i "s/sqlalchemy.db1.url = sqlite:/#sqlalchemy.db1.url = sqlite:/" $RCDATA/production.ini
