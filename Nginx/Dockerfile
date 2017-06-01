@@ -22,8 +22,11 @@ RUN apk add --no-cache \
 # Define working directory.
 WORKDIR $HOME
 
+COPY script/docker-entrypoint.sh /
+
 # Port forwarding target.
 EXPOSE 80 443
 
 # Define default command.
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
