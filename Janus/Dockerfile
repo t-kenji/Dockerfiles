@@ -1,85 +1,96 @@
 #
-# Dockerfile for Janus-gateway Container.
+# Dockerfile for Janus-Gateway Container.
 #
 
 # Pull base image.
-FROM alpine:3.6
+FROM ubuntu:14.04
 
 # Author.
 MAINTAINER tkenji <protect.2501@gmail.com>
 
 # Set environment variables.
-USER root
 ENV HOME=/root
 ENV LANG=en_US.utf8
+ENV LC_ALL=C
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install packages.
-RUN apk update
-RUN apk add --no-cache \
-            autoconf \
-            automake \
-            cmake \
-            curl-dev \
-            gcc \
-            g++ \
-            gengetopt \
-            git \
-            git-svn \
-            glib-dev \
-            jansson-dev \
-            libmicrohttpd-dev \
-            libnice-dev \
-            libogg-dev \
-            libressl-dev \
-            libsrtp-dev \
-            libtool \
-            libwebsockets-dev \
-            m4 \
-            make \
-            opus-dev \
-            pkgconf \
-            rabbitmq-c-dev \
-            $NULL
-RUN apk add --no-cache \
-            vim \
-            bash \
-            logrotate \
-            supervisor \
-            $NULL
+RUN sed -i -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y python-software-properties \
+                       software-properties-common
+RUN add-apt-repository -y ppa:0k53d-karl-f830m/openssl
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y curl \
+                       git \
+                       build-essential \
+                       automake \
+                       cmake \
+                       gengetopt \
+                       libmicrohttpd-dev \
+                       libjansson-dev \
+                       libnice-dev \
+                       libssl-dev \
+                       libsofia-sip-ua-dev \
+                       libglib2.0-dev \
+                       libopus-dev \
+                       libogg-dev \
+                       libcurl4-openssl-dev \
+                       libtool \
+                       logrotate \
+                       openssl \
+                       pkg-config \
+                       supervisor \
+                       $NULL
+RUN apt-get install -y vim
 
 # Define working directory.
 WORKDIR $HOME
 
 COPY script/docker-entrypoint.sh /
 
-# Setup supervisor
-RUN mkdir -p /etc/supervisor.d
-COPY conf/supervisor/*.ini /etc/supervisor.d/
-COPY conf/logrotate/supervisor /etc/logrotate.d/
-
-# Setup usrsctp.
-RUN git clone --depth=1 -b 0.9.3.0 https://github.com/sctplab/usrsctp.git
-RUN cd usrsctp && \
-    ./bootstrap && \
-    ./configure && \
+# Setup janus-gateway.
+RUN curl -L https://github.com/cisco/libsrtp/archive/v2.0.0.tar.gz | tar zx && \
+    cd libsrtp-2.0.0 && \
+    ./configure --prefix=/usr --enable-openssl && \
+    make shared_library && \
     make install
-
-# Setup paho.mqtt.c.
-RUN git clone --depth=1 -b v1.1.0 https://github.com/eclipse/paho.mqtt.c.git
-RUN cd paho.mqtt.c && \
-    mkdir -p temp && \
-    cd temp && \
-    cmake -DPAHO_WITH_SSL=TRUE .. && \
-    make install
-
-# Setup janus-gateway
-RUN git clone --depth=1 -b hotfix/libressl-support https://github.com/t-kenji/janus-gateway.git
-RUN cd janus-gateway && \
+RUN git clone --depth=1 https://github.com/sctplab/usrsctp && \
+    cd usrsctp && \
+    mkdir workbench && \
+    cd workbench && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \
+    cmake --build . --target install
+RUN git clone --depth=1 -b v2.2.1 https://github.com/warmcat/libwebsockets.git && \
+    cd libwebsockets && \
+    mkdir workbench && \
+    cd workbench && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" .. && \
+    cmake --build . --target install
+RUN git clone --depth=1 https://github.com/eclipse/paho.mqtt.c.git && \
+    cd paho.mqtt.c && \
+    mkdir workbench && \
+    cd workbench && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DPAHO_WITH_SSL=TRUE .. && \
+    cmake --build . --target install
+RUN git clone --depth=1 -b v0.8.0 https://github.com/alanxz/rabbitmq-c.git && \
+    cd rabbitmq-c && \
+    mkdir workbench && \
+    cd workbench && \
+    cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \
+    cmake --build . --config Release --target install
+RUN git clone --depth=1 -b v0.2.2 https://github.com/t-kenji/janus-gateway.git && \
+    cd janus-gateway && \
     ./autogen.sh && \
-    ./configure && \
-    make install
-RUN cd /usr/local/etc/janus && \
-    for cfg in `ls *.sample`; do mv ${cfg} ${cfg%.sample}; done
+    LIBS="-lpthread" ./configure --prefix=/usr && \
+    make && \
+    make install && \
+    make configs
+
+# Setup supervisor
+COPY conf/supervisor/*.conf /etc/supervisor/conf.d/
+COPY conf/logrotate/supervisor /etc/logrotate.d/
 
 # Port forwarding target.
 EXPOSE 8088 8089 8188 8989

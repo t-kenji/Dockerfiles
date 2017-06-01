@@ -24,6 +24,10 @@ WORKDIR $HOME
 
 COPY script/docker-entrypoint.sh /
 
+# Setup nginx.
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY conf/nginx/*.conf /etc/nginx/conf.d/
+
 # Port forwarding target.
 EXPOSE 80 443
 
