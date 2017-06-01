@@ -13,6 +13,6 @@ docker run -d \
            --link letschat:letschat \
            --link jenkins-master:jenkins \
            --link janus:janus \
-		   -v ${MOUNT_ROOT}/janus/www-data:/usr/share/www-data/janus \
+           -v ${MOUNT_ROOT}/janus/www-data:/usr/share/www-data/janus \
            tkenji/${NAME} \
            $@
