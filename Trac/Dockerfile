@@ -52,11 +52,10 @@ COPY script/bootstrap.py $HOME
 
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d
-COPY conf/supervisor/*.ini /etc/supervisor.d/
 COPY conf/logrotate/supervisor /etc/logrotate.d/
 
 # Expose port.
-EXPOSE 8001
+EXPOSE 8001-8009
 
 # Define default command.
 ENTRYPOINT ["/docker-entrypoint.sh"]
