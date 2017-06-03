@@ -1,0 +1,99 @@
+version: '2'
+
+services:
+
+    # Postgres
+    postgres:
+        build: ./Postgres
+        image: biotop/postgres
+        volumes:
+            - ~/.docker-containers/volumes/postgres/data:/var/lib/postgresql/data
+
+    # MongoDB
+    mongodb:
+        build: ./MongoDB
+        image: biotop/mongodb
+        volumes:
+            - ~/.docker-containers/volumes/mongodb/data:/data
+
+    # Kallithea
+    kallithea:
+        build: ./Kallithea
+        image: biotop/kallithea
+        links:
+            - postgres:db
+        volumes:
+            - ~/.docker-containers/volumes/kallithea/data:/var/lib/kallithea/data
+
+    # Lets-chat
+    letschat:
+        build: ./Letschat
+        image: biotop/letschat
+        ports:
+            - "5000:5000"
+        links:
+            - mongodb:db
+
+    # Jenkins slave (program #1)
+    jenkins-slave-program-1:
+        build: ./Jenkins-slave-program
+        image: biotop/jenkins-slave-program
+        volumes:
+            - ~/.docker-containers/volumes/jenkins-slave-program-1/ssh:/home/jenkins/.ssh
+
+    # Jenkins master
+    jenkins-master:
+        build: ./Jenkins-master
+        image: biotop/jenkins-master
+        links:
+            - jenkins-slave-program-1:slave-program-1
+        volumes:
+            - ~/.docker-containers/volumes/jenkins-master/jenkins_home:/var/jenkins_home
+
+    # Janus-gateway
+    janus:
+        build: ./Janus
+        image: biotop/janus
+        volumes:
+            - ~/.docker-containers/volumes/certs:/usr/share/certs
+
+    # Trac
+    trac:
+        build: ./Trac
+        image: biotop/trac
+        volumes:
+            - ~/.docker-containers/volumes/trac/data:/var/lib/trac
+
+    # Errbot
+    errbot:
+        build: ./Errbot
+        image: biotop/errbot
+        links:
+            - letschat:letschat
+        volumes:
+            - ~/.docker-containers/volumes/errbot/data:/var/lib/errbot/data
+        environment:
+            - ERRBOT_LCB_HOSTNAME=letschat
+            - ERRBOT_LCB_TOKEN=NTkyMjAzOTM1ZDAyZWM4MDAwODQ4ZDVhOjZlZDRiNzhjYTYwMzE2NTNlYjQxODczNGI4ODZjZWY0NDgwMjM4MjhhZDBhNTk3Yw==
+            - ERRBOT_LCB_ROOMS=59214e325d02ec8000848d58
+            - ERRBOT_LCB_ADMINS=@ktakahashi
+            - ERRBOT_LCB_NAME=errbot
+
+    # Reverse-proxy
+    nginx:
+        build: ./Nginx
+        image: biotop/nginx
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8089:8089"
+            - "8989:8989"
+        links:
+            - trac:trac
+            - kallithea:kallithea
+            - letschat:letschat
+            - jenkins-master:jenkins
+            - janus:janus
+        volumes:
+            - ~/.docker-containers/volumes/certs:/usr/share/certs
+            - ~/.docker-containers/volumes/nginx/www-data:/usr/share/www-data
