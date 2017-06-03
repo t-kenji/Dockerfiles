@@ -10,7 +10,7 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 
 # Set environment variables.
 ENV HOME=/root
-ENV LANG=en_US.utf8
+ENV LANG=C.UTF-8
 ENV RCDATA=/var/lib/kallithea/data
 
 # Set data volume.

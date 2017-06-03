@@ -10,8 +10,7 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 
 # Set environment variables.
 ENV HOME=/root
-ENV LANG=en_US.utf8
-ENV LC_ALL=C
+ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install packages.

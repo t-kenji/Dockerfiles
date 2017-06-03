@@ -11,6 +11,7 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 # Set environment variables.
 ENV USER=jenkins
 ENV HOME=/home/$USER
+ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 RUN echo 'Asia/Tokyo' > /etc/timezone && \
     dpkg-reconfigure --frontend noninteractive tzdata

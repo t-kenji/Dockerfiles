@@ -10,7 +10,7 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 
 # Set environment variables.
 ENV HOME=/root
-ENV LANG=en_US.utf8
+ENV LANG=C.UTF-8
 
 # Install packages.
 RUN apk update
@@ -29,7 +29,7 @@ RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY conf/nginx/*.conf /etc/nginx/conf.d/
 
 # Port forwarding target.
-EXPOSE 80 443
+EXPOSE 80 443 8089 8989
 
 # Define default command.
 ENTRYPOINT ["/docker-entrypoint.sh"]

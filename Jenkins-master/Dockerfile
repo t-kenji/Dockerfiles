@@ -11,7 +11,7 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 # Set environment variables.
 USER root
 ENV HOME=/root
-ENV LANG=en_US.utf8
+ENV LANG=C.UTF-8
 ENV JENKINS_HOME=/var/jenkins_home
 
 # Set data volume.

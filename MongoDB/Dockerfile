@@ -10,6 +10,7 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 
 # Set environment variables.
 ENV HOME=/root
+ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 ENV MONGODATA=/data
 
