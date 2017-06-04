@@ -12,9 +12,11 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 ENV HOME=/root
 ENV LANG=C.UTF-8
 ENV RCDATA=/var/lib/kallithea/data
+ENV RCREPO=/var/lib/kallithea/repos
 
 # Set data volume.
 VOLUME $RCDATA
+VOLUME $RCREPO
 
 # Install packages.
 RUN apk update

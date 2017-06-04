@@ -34,7 +34,6 @@ else
 fi
 
 if [ ! -e $RCDATA/production.ini ]; then
-	mkdir -p $RCDATA
 	./venv/bin/paster make-config kallithea $RCDATA/production.ini
 	ln -s ../kallithea-rcextensions/rcextentions $RCDATA/
 	sed -i "s/host = 127.0.0.1/host = 0.0.0.0/" $RCDATA/production.ini
@@ -42,11 +41,13 @@ if [ ! -e $RCDATA/production.ini ]; then
 	sed -i "s/^#\(\[filter:proxy-prefix\]\)$/\1/" $RCDATA/production.ini
 	sed -i "s/^#\(use = egg:PasteDeploy#prefix\)$/\1/" $RCDATA/production.ini
 	sed -i "s/^#prefix = \/<your-prefix>$/prefix = \/kallithea/" $RCDATA/production.ini
-	sed -i "s/^#\(filter-with = proxy-prefix\)/\1/" $RCDATA/production.ini
 	sed -i "s/lang =\( en\)*/lang = ja/" $RCDATA/production.ini
 	sed -i "s/default_encoding = utf8/default_encoding = utf8, cp932/" $RCDATA/production.ini
 	sed -i "s/sqlalchemy.db1.url = sqlite:/#sqlalchemy.db1.url = sqlite:/" $RCDATA/production.ini
 	sed -i "s/#sqlalchemy.db1.url = postgresql:\/\/user:pass@localhost/sqlalchemy.db1.url = postgresql:\/\/kallithea@db/" $RCDATA/production.ini
+
+	yes | ./venv/bin/paster setup-db $RCDATA/production.ini --user=admin --password=admin0 --email=admin@email.com --repos=$RCREPO
+	sed -i "s/^#\(filter-with = proxy-prefix\)/\1/" $RCDATA/production.ini
 fi
 
 exec "$@"

@@ -24,6 +24,7 @@ services:
             - postgres:db
         volumes:
             - ~/.docker-containers/volumes/kallithea/data:/var/lib/kallithea/data
+            - ~/.docker-containers/volumes/kallithea/repos:/var/lib/kallithea/repos
 
     # Lets-chat
     letschat:
