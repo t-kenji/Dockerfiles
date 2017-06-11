@@ -2,36 +2,10 @@
 
 cd $HOME
 
-if [ ! -d kallithea-mirror ]; then
-	git clone https://github.com/t-kenji/kallithea-mirror.git
-else
-	echo "[INFO] kallithea-mirror already exists."
-fi
-
-if [ ! -d kallithea-rcextensions ]; then
-	git clone https://github.com/t-kenji/kallithea-rcextensions.git
-else
-	echo "[INFO] kallithea-rcextensions already exists."
-fi
-
-if [ ! -d venv ]; then
-	virtualenv --no-site-packages venv
-	cat << __EOS__ >> ./venv/lib/python2.7/sitecustomize.py
-try:
-	import sys
-except ImportError:
-	pass
-else:
-	sys.setdefaultencoding('utf-8')
-__EOS__
-	cd kallithea-mirror
-	../venv/bin/pip install setuptools==33.1.1 Babel==1.3 psycopg2 sqlalchemy-migrate
-	../venv/bin/python setup.py compile_catalog
-	../venv/bin/pip install .
-	cd -
-else
-	echo "[INFO] venv already exists."
-fi
+until psql -h db -U "kallithea" -c '\l'; do
+	echo "[INFO] Postgres is unavailable - waiting"
+	sleep 1
+done
 
 if [ ! -e $RCDATA/production.ini ]; then
 	./venv/bin/paster make-config kallithea $RCDATA/production.ini
@@ -46,8 +20,10 @@ if [ ! -e $RCDATA/production.ini ]; then
 	sed -i "s/sqlalchemy.db1.url = sqlite:/#sqlalchemy.db1.url = sqlite:/" $RCDATA/production.ini
 	sed -i "s/#sqlalchemy.db1.url = postgresql:\/\/user:pass@localhost/sqlalchemy.db1.url = postgresql:\/\/kallithea@db/" $RCDATA/production.ini
 
-	yes | ./venv/bin/paster setup-db $RCDATA/production.ini --user=admin --password=admin0 --email=admin@email.com --repos=$RCREPO
+	yes | ./venv/bin/paster setup-db $RCDATA/production.ini --user=$KALLITHEA_ADMIN_USER --password=$KALLITHEA_ADMIN_PASS --email=$KALLITHEA_ADMIN_EMAIL --repos=$RCREPO
 	sed -i "s/^#\(filter-with = proxy-prefix\)/\1/" $RCDATA/production.ini
+else:
+	echo "[INFO] already production.ini exists."
 fi
 
 exec "$@"

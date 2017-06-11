@@ -2,12 +2,8 @@
 
 cd $HOME
 
-if [ ! -d lets-chat ]; then
-	git clone -b custom https://github.com/t-kenji/lets-chat.git
-	cd lets-chat
-	cp settings.yml.sample settings.yml
-	patch -u settings.yml < $HOME/settings.yml.patch
-	npm install
+if [ "$REVERSE_PROXY" != "" ]; then
+	sed -i "s/YOUR_SERVER/$REVERSE_PROXY/" /root/lets-chat/settings.yml
 fi
 
 exec "$@"

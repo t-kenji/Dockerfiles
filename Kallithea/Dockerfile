@@ -30,6 +30,7 @@ RUN apk add --no-cache \
             logrotate \
             mercurial \
             postgresql-dev \
+            postgresql-client \
             supervisor \
             $NULL
 RUN apk add --no-cache \
@@ -41,10 +42,24 @@ RUN pip install --no-cache-dir \
                 virtualenv \
                 $NULL
 
+COPY script/docker-entrypoint.sh /
+
 # Define working directory.
 WORKDIR $HOME
 
-COPY script/docker-entrypoint.sh /
+# Setup kallithea
+COPY conf/venv/requirements.txt ./
+RUN virtualenv --no-site-packages ./venv && \
+    ./venv/bin/pip install -r ./requirements.txt && \
+    /bin/echo -e "\
+try:\n\
+	import sys\n\
+except ImportError:\n\
+	pass\n\
+else:\n\
+	sys.setdefaultencoding('utf-8')\n\
+" >> ./venv/lib/python2.7/sitecustomize.py
+RUN git clone https://github.com/t-kenji/kallithea-rcextensions.git
 
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d

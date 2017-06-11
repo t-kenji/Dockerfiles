@@ -1,0 +1,468 @@
+# -*- coding: utf-8 -*-
+
+[account-manager]
+account_changes_notify_addresses = 
+allow_delete_account = enabled
+cookie_refresh_pct = 10
+force_passwd_change = enabled
+generated_password_length = 8
+htdigest_file = /var/lib/trac/sites/YOUR_TRAC_PROJECT/trac.htdigest
+htdigest_realm = Trac
+login_attempt_max_count = 0
+login_opt_list = disabled
+password_store = HtDigestStore
+persistent_sessions = disabled
+refresh_passwd = disabled
+register_check = 
+reset_password = disabled
+user_lock_max_time = 86400
+user_lock_time = 0
+user_lock_time_progression = 1
+verify_email = enabled
+
+[attachment]
+max_size = 262144
+max_zip_size = 2097152
+render_unsafe_content = disabled
+
+[avatar]
+attachment_lineitem_size = 20
+attachment_view_size = 20
+avatar_default = default
+backend = built-in
+browser_changeset_size = 24
+browser_lineitem_size = 20
+metanav_size = 22
+prefs_form_size = 40
+report_size = 20
+search_results_size = 20
+show_avatar_detail = disabled
+ticket_comment_diff_size = 20
+ticket_comment_history_size = 20
+ticket_comment_size = 24
+ticket_owner_size = 20
+ticket_reporter_size = 60
+timeline_size = 20
+wiki_diff_size = 20
+wiki_history_size = 20
+wiki_version_size = 20
+
+[browser]
+color_scale = enabled
+downloadable_paths = /trunk,/branches/*,/tags/*
+hide_properties = svk:merge
+intermediate_color = 
+intermediate_point = 
+newest_color = (255, 136, 136)
+oldest_color = (136, 136, 255)
+oneliner_properties = trac:summary
+render_unsafe_content = disabled
+wiki_properties = trac:description
+
+[changeset]
+max_diff_bytes = 10000000
+max_diff_files = 0
+wiki_format_messages = enabled
+
+[components]
+acct_mgr.admin.* = enabled
+acct_mgr.api.* = enabled
+acct_mgr.db.sessionstore = disabled
+acct_mgr.guard.accountguard = disabled
+acct_mgr.htfile.htdigeststore = enabled
+acct_mgr.htfile.htpasswdstore = disabled
+acct_mgr.http.* = disabled
+acct_mgr.model.* = disabled
+acct_mgr.notification.* = enabled
+acct_mgr.pwhash.* = disabled
+acct_mgr.pwhash.htdigesthashmethod = enabled
+acct_mgr.register.* = disabled
+acct_mgr.register.emailverificationmodule = enabled
+acct_mgr.register.registrationmodule = disabled
+acct_mgr.svnserve.svnservepasswordstore = disabled
+acct_mgr.web_ui.* = enabled
+acct_mgr.web_ui.loginmodule = enabled
+acct_mgr.web_ui.resetpwstore = disabled
+autocomplete_provider.core.autocompleteprovider = enabled
+avatar.web_ui.avatarmodule = enabled
+avatar.web_ui.avatarprovider = enabled
+ganttcalendar.admin.holidayadminpanel = enabled
+ganttcalendar.complete_by_close.completeticketobserver = enabled
+ganttcalendar.ticketcalendar.ticketcalendarplugin = enabled
+ganttcalendar.ticketgantt.ticketganttchartplugin = enabled
+ganttcalendar.ticketvalidator.ticketvalidator = enabled
+includemacro.macros.includemacro = enabled
+keyword_labels.web_ui.keywordlabelsmodule = enabled
+letschat_notification.letschatblognotifcationmodule = enabled
+letschat_notification.letschatticketnotifcationmodule = enabled
+letschat_notification.letschatwikinotifcationmodule = enabled
+multiselectfield.filter.multiselectfieldmodule = enabled
+nekotheme.theme.tracmikenekotheme = enabled
+permredirect.filter.permredirectmodule = enabled
+themeengine.admin.customthemeadminmodule = enabled
+themeengine.admin.simplethemeadminmodule = enabled
+themeengine.api.themeenginesystem = enabled
+themeengine.web_ui.themeenginemodule = enabled
+ticketrels.api.ticketparentchildrelations = enabled
+ticketrels.api.ticketreference = enabled
+ticketrels.api.ticketrelationssystem = enabled
+ticketrels.web_ui.ticketrelationsmodule = enabled
+tickettemplate.ttadmin.tickettemplatemodule = enabled
+trac.web.auth.loginmodule = disabled
+trac_emoji.trac_emoji.tracemoji = enabled
+tracblockdiag.plugin.blockdiagrenderer = enabled
+tracexceldownload.ticket.excelreportmodule = enabled
+tracexceldownload.ticket.excelticketmodule = enabled
+tracexceldownload.translation.translationmodule = enabled
+tracfullblog.admin.fullblogadminpanel = enabled
+tracfullblog.core.fullblogcore = enabled
+tracfullblog.db.fullblogsetup = enabled
+tracfullblog.macros.bloglistmacro = enabled
+tracfullblog.tags.fullblogtagsystem = enabled
+tracfullblog.web_ui.fullblogmodule = enabled
+tracimagepreview.core.imagepreview = enabled
+tracrpc.api.xmlrpcsystem = enabled
+tracrpc.json_rpc.jsonrpcprotocol = enabled
+tracrpc.search.searchrpc = enabled
+tracrpc.ticket.componentrpc = enabled
+tracrpc.ticket.milestonerpc = enabled
+tracrpc.ticket.priorityrpc = enabled
+tracrpc.ticket.resolutionrpc = enabled
+tracrpc.ticket.severityrpc = enabled
+tracrpc.ticket.statusrpc = enabled
+tracrpc.ticket.ticketrpc = enabled
+tracrpc.ticket.typerpc = enabled
+tracrpc.ticket.versionrpc = enabled
+tracrpc.web_ui.rpcweb = enabled
+tracrpc.wiki.wikirpc = enabled
+tracrpc.xml_rpc.xmlrpcprotocol = enabled
+tracsectionedit.web_ui.wikisectioneditmodule = enabled
+tractags.admin.tagchangeadminpanel = enabled
+tractags.api.tagpolicy = enabled
+tractags.api.tagsystem = enabled
+tractags.db.tagsetup = enabled
+tractags.macros.tagwikimacros = enabled
+tractags.ticket.tickettagprovider = enabled
+tractags.web_ui.taginputautocomplete = enabled
+tractags.web_ui.tagrequesthandler = enabled
+tractags.web_ui.tagtimelineeventfilter = enabled
+tractags.web_ui.tagtimelineeventprovider = enabled
+tractags.wiki.tagwikisyntaxprovider = enabled
+tractags.wiki.wikitaginterface = enabled
+tractags.wiki.wikitagprovider = enabled
+tractags.xmlrpc.tagrpc = enabled
+
+[fullblog]
+all_rss_icons = disabled
+archive_rss_icon = enabled
+default_postname = 
+month_names = 
+num_items_front = 20
+personal_blog = disabled
+
+[ganttcalendar]
+complete_conditions = fixed, invalid
+complete_field = complete
+default_zoom_mode = 3
+first_day = 0
+format = %Y/%m/%d
+show_ticket_summary = disabled
+show_weekly_view = disabled
+
+[header_logo]
+alt = (please configure the [header_logo] section in trac.ini)
+height = -1
+link = 
+src = site/your_project_logo.png
+width = -1
+
+[inherit]
+htdocs_dir = 
+plugins_dir = 
+templates_dir = 
+
+[letschat]
+blog_room = 
+ticket_fields = type,priority,component,resolution
+ticket_room = 
+token = 
+webapi = 
+wiki_room = 
+
+[logging]
+log_file = trac.log
+log_format = 
+log_level = DEBUG
+log_type = none
+
+[mainnav]
+admin.order = 8.0
+browser.order = 4.0
+newticket.order = 6.0
+roadmap.order = 3.0
+search.order = 7.0
+tickets.order = 5.0
+timeline.order = 2.0
+wiki.order = 1.0
+
+[metanav]
+about.order = 5.0
+help.order = 4.0
+login.order = 1.0
+logout.order = 2.0
+prefs.order = 3.0
+
+[milestone]
+default_group_by = component
+default_retarget_to = 
+stats_provider = DefaultTicketGroupStatsProvider
+
+[mimeviewer]
+max_preview_size = 262144
+mime_map = text/x-dylan:dylan,text/x-idl:ice,text/x-ada:ads:adb
+mime_map_patterns = text/plain:README(?!\.rst)|INSTALL(?!\.rst)|COPYING.*
+pygments_default_style = trac
+pygments_modes = 
+tab_width = 8
+treat_as_binary = application/octet-stream,application/pdf,application/postscript,application/msword,application/rtf
+
+[multiselectfield]
+data_delimiter = 
+simple_selection = disabled
+strip_whitespace = enabled
+
+[notification]
+admit_domains = 
+ambiguous_char_width = single
+batch_subject_template = $prefix Batch modify: $tickets_descr
+email_address_resolvers = SessionEmailResolver
+email_sender = SmtpEmailSender
+ignore_domains = 
+message_id_hash = md5
+mime_encoding = none
+sendmail_path = sendmail
+smtp_always_bcc = 
+smtp_always_cc = 
+smtp_default_domain = 
+smtp_enabled = disabled
+smtp_from = trac@localhost
+smtp_from_author = disabled
+smtp_from_name = 
+smtp_password = 
+smtp_port = 25
+smtp_replyto = trac@localhost
+smtp_server = localhost
+smtp_subject_prefix = __default__
+smtp_user = 
+ticket_subject_template = $prefix #$ticket.id: $summary
+use_public_cc = disabled
+use_short_addr = disabled
+use_tls = disabled
+
+[notification-subscriber]
+always_notify_cc = CarbonCopySubscriber
+always_notify_previous_updater = TicketPreviousUpdatersSubscriber
+always_notify_updater = TicketUpdaterSubscriber
+
+[permredirect]
+redirect_login = enabled
+redirect_login_https = disabled
+
+[project]
+admin = 
+admin_trac_url = .
+descr = My example project
+footer = Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a>
+icon = common/trac.ico
+name = sample
+url = 
+
+[query]
+default_anonymous_query = status!=closed&cc~=$USER
+default_query = status!=closed&owner=$USER
+items_per_page = 100
+ticketlink_query = ?status=!closed
+
+[report]
+items_per_page = 100
+items_per_page_rss = 0
+
+[revisionlog]
+default_log_limit = 100
+graph_colors = #cc0,#0c0,#0cc,#00c,#c0c,#c00
+
+[roadmap]
+stats_provider = DefaultTicketGroupStatsProvider
+
+[search]
+default_disabled_filters = 
+min_query_length = 3
+
+[section-edit]
+edit_subsections = disabled
+preview_whole_page = enabled
+
+[sqlite]
+extensions = 
+
+[svn]
+authz_file = 
+authz_module_name = 
+
+[tags]
+cloud_caseless_sort = disabled
+cloud_mincount = 1
+complete_field = keywords
+complete_matchcontains = enabled
+complete_sticky_tags = 
+default_format = oldlist
+default_table_cols = id|description|tags
+exclude_realms = 
+ignore_closed_tickets = enabled
+listtagged_default_format = oldlist
+listtagged_default_table_cols = id|description|tags
+listtagged_exclude_realms = 
+listtagged_items_per_page = 100
+query_exclude_wiki_templates = enabled
+revisable_realms = wiki
+separator = 
+ticket_fields = keywords
+ticket_help = 
+ticket_help_newwindow = disabled
+wiki_page_link = enabled
+wiki_page_prefix = 
+
+[theme]
+enable_css = disabled
+theme = tracmikeneko
+
+[ticket]
+allowed_empty_fields = milestone,version
+default_cc = 
+default_component = 
+default_description = 
+default_keywords = 
+default_milestone = 
+default_owner = < default >
+default_priority = major
+default_resolution = fixed
+default_severity = 
+default_summary = 
+default_type = defect
+default_version = 
+max_comment_size = 262144
+max_description_size = 262144
+max_summary_size = 262144
+preserve_newlines = default
+restrict_owner = disabled
+workflow = ConfigurableTicketWorkflow
+
+[ticket-custom]
+parents = text
+parents.label = Parent Tickets
+refs = text
+refs.label = Reference Tickets
+
+[ticket-workflow]
+accept = new,assigned,accepted,reopened -> accepted
+accept.operations = set_owner_to_self
+accept.permissions = TICKET_MODIFY
+create = <none> -> new
+create.default = 1
+create_and_assign = <none> -> assigned
+create_and_assign.label = assign
+create_and_assign.operations = may_set_owner
+create_and_assign.permissions = TICKET_MODIFY
+leave = * -> *
+leave.default = 1
+leave.operations = leave_status
+reassign = new,assigned,accepted,reopened -> assigned
+reassign.operations = set_owner
+reassign.permissions = TICKET_MODIFY
+reopen = closed -> reopened
+reopen.operations = del_resolution
+reopen.permissions = TICKET_CREATE
+resolve = new,assigned,accepted,reopened -> closed
+resolve.operations = set_resolution
+resolve.permissions = TICKET_MODIFY
+
+[ticketrels]
+restricted_status = closed
+
+[tickettemplate]
+enable_custom = enabled
+field_list = summary,description,reporter,owner,priority,cc,milestone,component,version,type
+json_template_file = 
+
+[timeline]
+abbreviated_messages = enabled
+changeset_collapse_events = disabled
+changeset_long_messages = disabled
+changeset_show_files = 0
+default_daysback = 30
+max_daysback = 90
+newticket_formatter = oneliner
+ticket_show_component = disabled
+ticket_show_details = disabled
+
+[trac]
+auth_cookie_domain = 
+auth_cookie_lifetime = 0
+auth_cookie_path = 
+auto_preview_timeout = 2.0
+auto_reload = disabled
+backup_dir = db
+base_url = http://YOUR_REVERSE_PROXY/trac/YOUR_TRAC_PROJECT
+check_auth_ip = disabled
+database = sqlite:db/trac.db
+debug_sql = disabled
+default_charset = utf-8
+default_date_format = 
+default_dateinfo_format = relative
+default_handler = WikiModule
+default_language = 
+default_timezone = 
+genshi_cache_size = 128
+htdocs_location = 
+ignore_auth_case = disabled
+jquery_location = 
+jquery_ui_location = 
+jquery_ui_theme_location = 
+mysqldump_path = mysqldump
+never_obfuscate_mailto = disabled
+permission_policies = ReadonlyWikiPolicy,DefaultPermissionPolicy,LegacyAttachmentPolicy
+permission_store = DefaultPermissionStore
+pg_dump_path = pg_dump
+request_filters = 
+resizable_textareas = enabled
+secure_cookies = disabled
+show_email_addresses = disabled
+show_full_names = enabled
+show_ip_addresses = disabled
+timeout = 20
+use_base_url_for_redirect = enabled
+use_chunked_encoding = disabled
+use_xsendfile = disabled
+wiki_toolbars = enabled
+xsendfile_header = X-Sendfile
+
+[tracblockdiag]
+cachetime = 300
+default_type = svg
+fallback = disabled
+font = 
+gc_interval = 100
+syntax_check = enabled
+
+[versioncontrol]
+allowed_repository_dir_prefixes = 
+default_repository_type = svn
+
+[wiki]
+default_edit_area_height = 20
+ignore_missing_pages = disabled
+max_size = 262144
+render_unsafe_content = disabled
+safe_schemes = cvs,file,ftp,git,irc,http,https,news,sftp,smb,ssh,svn,svn+ssh
+split_page_names = disabled
+

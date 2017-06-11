@@ -42,13 +42,14 @@ RUN pip install --no-cache-dir \
                 virtualenv \
                 $NULL
 
+COPY script/docker-entrypoint.sh /
+
 # Define working directory.
 WORKDIR $HOME
 
-COPY script/docker-entrypoint.sh /
-
 # Setup trac.
-COPY script/bootstrap.py $HOME
+COPY script/bootstrap.py $HOME/
+COPY conf/trac/trac.ini.template $HOME/
 
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d

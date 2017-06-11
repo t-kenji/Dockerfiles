@@ -30,7 +30,12 @@ RUN apk add --no-cache \
 WORKDIR $HOME
 
 COPY script/docker-entrypoint.sh /
-COPY patches/settings.yml.patch $HOME
+
+# Setup lets-chat
+RUN git clone -b aim-for-stable https://github.com/t-kenji/lets-chat.git && \
+    cd lets-chat && \
+    npm install
+COPY conf/lets-chat/settings.yml lets-chat/
 
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d

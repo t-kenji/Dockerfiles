@@ -29,10 +29,11 @@ RUN apk add --no-cache \
             bash \
             $NULL
 
+COPY script/docker-entrypoint.sh /
+
 # Setup jenkins.
 COPY conf/jenkins/plugins.txt /usr/share/jenkins/ref
-
-COPY script/docker-entrypoint.sh /
+RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
 
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d
@@ -40,7 +41,7 @@ COPY conf/supervisor/*.ini /etc/supervisor.d/
 COPY conf/logrotate/supervisor /etc/logrotate.d/
 
 # Port forwarding target.
-EXPOSE 8080 50000
+EXPOSE 8080
 
 # Define default command.
 ENTRYPOINT ["/docker-entrypoint.sh"]
