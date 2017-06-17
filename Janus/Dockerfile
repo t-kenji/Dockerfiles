@@ -79,7 +79,7 @@ RUN git clone --depth=1 -b v0.8.0 https://github.com/alanxz/rabbitmq-c.git && \
     cd workbench && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \
     cmake --build . --config Release --target install
-RUN git clone --depth=1 -b v0.2.2 https://github.com/t-kenji/janus-gateway.git && \
+RUN git clone --depth=1 -b v0.2.3 https://github.com/t-kenji/janus-gateway.git && \
     cd janus-gateway && \
     ./autogen.sh && \
     LIBS="-lpthread" ./configure --prefix=/usr && \
