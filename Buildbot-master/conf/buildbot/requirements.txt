@@ -1,0 +1,6 @@
+Jinja2
+pysqlite
+pytz
+requests
+sqlalchemy-migrate
+buildbot[bundle,tls]
