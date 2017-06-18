@@ -29,8 +29,6 @@ RUN apk add --no-cache \
 # Define working directory.
 WORKDIR $HOME
 
-COPY script/docker-entrypoint.sh /
-
 # Setup lets-chat
 RUN git clone -b aim-for-stable https://github.com/t-kenji/lets-chat.git && \
     cd lets-chat && \
@@ -40,6 +38,8 @@ COPY conf/lets-chat/settings.yml lets-chat/
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d
 COPY conf/supervisor/letschat.ini /etc/supervisor.d/
+
+COPY script/docker-entrypoint.sh /
 
 # Port forwarding target.
 EXPOSE 5000

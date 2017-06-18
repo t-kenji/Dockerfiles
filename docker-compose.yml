@@ -39,7 +39,7 @@ services:
         links:
             - mongodb:db
         environment:
-            - REVERSE_PROXY=172.18.0.10
+            - AVATAR_PROVIDER=http://192.168.11.3/trac/trac-plugin-test/avatar
 
     # Jenkins slave (program #1)
     jenkins-slave-program-1:
@@ -71,7 +71,7 @@ services:
         volumes:
             - ~/.docker-containers/volumes/trac/data:/var/lib/trac
         environment:
-            - REVERSE_PROXY=172.18.0.10
+            - REVERSE_PROXY=192.168.11.3
             - TRAC_PROJECT_NAME=trac-project-sample
 
     # Errbot

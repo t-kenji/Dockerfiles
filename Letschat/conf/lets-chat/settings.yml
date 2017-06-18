@@ -53,4 +53,4 @@ notifications:
   mentionedOnly: true
 
 avatar:
-  uri: http://YOUR_SERVER/trac/trac-plugin-test/avatar
+  uri: YOUR_AVATAR_PROVIDER
