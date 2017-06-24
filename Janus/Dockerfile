@@ -33,7 +33,6 @@ RUN apt-get update && \
                        libssl-dev \
                        libsofia-sip-ua-dev \
                        libglib2.0-dev \
-                       libopus-dev \
                        libogg-dev \
                        libcurl4-openssl-dev \
                        libtool \
@@ -50,6 +49,11 @@ WORKDIR $HOME
 COPY script/docker-entrypoint.sh /
 
 # Setup janus-gateway.
+RUN git clone --depth=1 -b v1.2 https://github.com/xiph/opus.git && \
+    cd opus && \
+    ./autogen.sh && \
+    ./configure --prefix=/usr && \
+    make install
 RUN curl -L https://github.com/cisco/libsrtp/archive/v2.0.0.tar.gz | tar zx && \
     cd libsrtp-2.0.0 && \
     ./configure --prefix=/usr --enable-openssl && \
