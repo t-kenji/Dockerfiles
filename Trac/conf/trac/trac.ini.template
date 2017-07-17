@@ -181,6 +181,10 @@ htdocs_dir =
 plugins_dir = 
 templates_dir = 
 
+[janusgateway]
+video_rooms = 101,102,103,104,105,106
+audio_rooms = 101,102,103,104,105,106
+
 [letschat]
 blog_room = 
 ticket_fields = type,priority,component,resolution

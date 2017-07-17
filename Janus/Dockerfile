@@ -90,6 +90,7 @@ RUN git clone --depth=1 -b v0.2.3 https://github.com/t-kenji/janus-gateway.git &
     make && \
     make install && \
     make configs
+COPY conf/janus/*.cfg /usr/etc/janus
 
 # Setup supervisor
 COPY conf/supervisor/*.conf /etc/supervisor/conf.d/

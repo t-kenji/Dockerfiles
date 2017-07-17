@@ -30,6 +30,7 @@ git+https://github.com/t-kenji/trac-fullblog-plugin.git
 git+https://github.com/t-kenji/trac-gantt-calendar-plugin.git@hotfix-trac-12-support
 git+https://github.com/t-kenji/trac-image-preview-plugin.git
 git+https://github.com/t-kenji/trac-include-macro.git
+git+https://github.com/t-kenji/trac-janus-plugin.git
 git+https://github.com/t-kenji/trac-keyword-labels-plugin.git
 git+https://github.com/t-kenji/trac-letschat-plugin.git
 git+https://github.com/t-kenji/trac-mension-plugin.git
