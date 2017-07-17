@@ -221,6 +221,19 @@ default_group_by = component
 default_retarget_to = 
 stats_provider = DefaultTicketGroupStatsProvider
 
+[milestone-groups]
+closed = closed
+closed.order = 0
+closed.query_args = group=resolution,order=time,col=id,col=summary,col=owner,col=type,col=priority,col=component,col=severity,col=time,col=changetime
+closed.overall_completion = true
+new = new
+new.order = 1
+new.css_class = new
+active = *
+active.order = 2
+active.css_class = open
+active.label = 作業中
+
 [mimeviewer]
 max_preview_size = 262144
 mime_map = text/x-dylan:dylan,text/x-idl:ice,text/x-ada:ads:adb
