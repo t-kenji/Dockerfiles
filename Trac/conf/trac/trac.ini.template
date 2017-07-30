@@ -18,7 +18,7 @@ reset_password = disabled
 user_lock_max_time = 86400
 user_lock_time = 0
 user_lock_time_progression = 1
-verify_email = enabled
+verify_email = False
 
 [attachment]
 max_size = 262144
@@ -83,6 +83,16 @@ acct_mgr.svnserve.svnservepasswordstore = disabled
 acct_mgr.web_ui.* = enabled
 acct_mgr.web_ui.loginmodule = enabled
 acct_mgr.web_ui.resetpwstore = disabled
+advancedworkflow.controller.ticketworkflowopownercomponent = enabled
+advancedworkflow.controller.ticketworkflowopownerfield = enabled
+advancedworkflow.controller.ticketworkflowopownerprevious = enabled
+advancedworkflow.controller.ticketworkflowopownerreporter = enabled
+advancedworkflow.controller.ticketworkflowopresetmilestone = enabled
+advancedworkflow.controller.ticketworkflowoprunexternal = enabled
+advancedworkflow.controller.ticketworkflowopstatusprevious = enabled
+advancedworkflow.controller.ticketworkflowoptriage = enabled
+advancedworkflow.controller.ticketworkflowopxref = enabled
+archiveviewer.zip.ziprenderer = enabled
 autocomplete_provider.core.autocompleteprovider = enabled
 avatar.web_ui.avatarmodule = enabled
 avatar.web_ui.avatarprovider = enabled
@@ -96,6 +106,7 @@ keyword_labels.web_ui.keywordlabelsmodule = enabled
 letschat_notification.letschatblognotifcationmodule = enabled
 letschat_notification.letschatticketnotifcationmodule = enabled
 letschat_notification.letschatwikinotifcationmodule = enabled
+mention.mention.mention = enabled
 multiselectfield.filter.multiselectfieldmodule = enabled
 nekotheme.theme.tracmikenekotheme = enabled
 permredirect.filter.permredirectmodule = enabled
@@ -111,6 +122,8 @@ tickettemplate.ttadmin.tickettemplatemodule = enabled
 trac.web.auth.loginmodule = disabled
 trac_emoji.trac_emoji.tracemoji = enabled
 tracblockdiag.plugin.blockdiagrenderer = enabled
+tracdragdrop.web_ui.tracdragdropmodule = enabled
+tracexceldownload.api.exceldownloadconfig = enabled
 tracexceldownload.ticket.excelreportmodule = enabled
 tracexceldownload.ticket.excelticketmodule = enabled
 tracexceldownload.translation.translationmodule = enabled
@@ -120,7 +133,18 @@ tracfullblog.db.fullblogsetup = enabled
 tracfullblog.macros.bloglistmacro = enabled
 tracfullblog.tags.fullblogtagsystem = enabled
 tracfullblog.web_ui.fullblogmodule = enabled
+trachours.hours.trachoursplugin = enabled
+trachours.multiproject.multiprojecthours = disabled
+trachours.setup.setuptrachours = enabled
+trachours.ticket.trachoursbycomment = enabled
+trachours.web_ui.trachoursroadmapfilter = enabled
+trachours.web_ui.tracuserhours = enabled
 tracimagepreview.core.imagepreview = enabled
+tracjanusgateway.web_ui.janusgatewayplugin = enabled
+tracmermaid.mermaid.mermaidmacro = enabled
+tracopt.versioncontrol.git.git_fs.csetpropertyrenderer = enabled
+tracopt.versioncontrol.git.git_fs.gitconnector = enabled
+tracopt.versioncontrol.git.git_fs.gitwebprojectsrepositoryprovider = enabled
 tracrpc.api.xmlrpcsystem = enabled
 tracrpc.json_rpc.jsonrpcprotocol = enabled
 tracrpc.search.searchrpc = enabled
@@ -152,6 +176,9 @@ tractags.wiki.wikitaginterface = enabled
 tractags.wiki.wikitagprovider = enabled
 tractags.xmlrpc.tagrpc = enabled
 
+[exceldownload]
+format = (auto)
+
 [fullblog]
 all_rss_icons = disabled
 archive_rss_icon = enabled
@@ -169,11 +196,28 @@ format = %Y/%m/%d
 show_ticket_summary = disabled
 show_weekly_view = disabled
 
+[git]
+cached_repository = disabled
+git_bin = git
+git_fs_encoding = utf-8
+persistent_cache = disabled
+shortrev_len = 7
+trac_user_rlookup = disabled
+use_committer_id = enabled
+use_committer_time = enabled
+wikishortrev_len = 40
+
+[gitweb-repositories]
+projects_base = 
+projects_list = 
+projects_url = 
+sync_per_request = 
+
 [header_logo]
 alt = (please configure the [header_logo] section in trac.ini)
 height = -1
 link = 
-src = site/your_project_logo.png
+src = 
 width = -1
 
 [inherit]
@@ -182,8 +226,8 @@ plugins_dir =
 templates_dir = 
 
 [janusgateway]
-video_rooms = 101,102,103,104,105,106
 audio_rooms = 101,102,103,104,105,106
+video_rooms = 101,102,103,104,105,106
 
 [letschat]
 blog_room = 
@@ -222,17 +266,17 @@ default_retarget_to =
 stats_provider = DefaultTicketGroupStatsProvider
 
 [milestone-groups]
-closed = closed
-closed.order = 0
-closed.query_args = group=resolution,order=time,col=id,col=summary,col=owner,col=type,col=priority,col=component,col=severity,col=time,col=changetime
-closed.overall_completion = true
-new = new
-new.order = 1
-new.css_class = new
 active = *
-active.order = 2
 active.css_class = open
 active.label = 作業中
+active.order = 2
+closed = closed
+closed.order = 0
+closed.overall_completion = true
+closed.query_args = group=resolution,order=time,col=id,col=summary,col=owner,col=type,col=priority,col=component,col=severity,col=time,col=changetime
+new = new
+new.css_class = new
+new.order = 1
 
 [mimeviewer]
 max_preview_size = 262144
@@ -255,7 +299,6 @@ batch_subject_template = $prefix Batch modify: $tickets_descr
 email_address_resolvers = SessionEmailResolver
 email_sender = SmtpEmailSender
 ignore_domains = 
-message_id_hash = md5
 mime_encoding = none
 sendmail_path = sendmail
 smtp_always_bcc = 
@@ -354,7 +397,7 @@ enable_css = disabled
 theme = tracmikeneko
 
 [ticket]
-allowed_empty_fields = milestone,version
+allowed_empty_fields = component,milestone,version
 default_cc = 
 default_component = 
 default_description = 
@@ -372,7 +415,7 @@ max_description_size = 262144
 max_summary_size = 262144
 preserve_newlines = default
 restrict_owner = disabled
-workflow = ConfigurableTicketWorkflow
+workflow = ConfigurableTicketWorkflow,TicketWorkflowOpTriage
 
 [ticket-custom]
 parents = text
