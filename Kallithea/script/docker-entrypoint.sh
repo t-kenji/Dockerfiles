@@ -16,6 +16,7 @@ if [ ! -e $RCDATA/production.ini ]; then
 	sed -i "s/^#\(use = egg:PasteDeploy#prefix\)$/\1/" $RCDATA/production.ini
 	sed -i "s/^#prefix = \/<your-prefix>$/prefix = \/kallithea/" $RCDATA/production.ini
 	sed -i "s/lang =\( en\)*/lang = ja/" $RCDATA/production.ini
+	sed -i "s/use_htsts = false/use_htsts = true/" $RCDATA/production.ini
 	sed -i "s/default_encoding = utf8/default_encoding = utf8, cp932/" $RCDATA/production.ini
 	sed -i "s/sqlalchemy.db1.url = sqlite:/#sqlalchemy.db1.url = sqlite:/" $RCDATA/production.ini
 	sed -i "s/#sqlalchemy.db1.url = postgresql:\/\/user:pass@localhost/sqlalchemy.db1.url = postgresql:\/\/kallithea@db/" $RCDATA/production.ini

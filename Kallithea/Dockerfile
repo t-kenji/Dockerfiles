@@ -48,7 +48,7 @@ COPY script/docker-entrypoint.sh /
 WORKDIR $HOME
 
 # Setup kallithea
-COPY conf/venv/requirements.txt ./
+COPY conf/kallithea/requirements.txt ./
 RUN virtualenv --no-site-packages ./venv && \
     ./venv/bin/pip install -r ./requirements.txt && \
     /bin/echo -e "\
