@@ -19,7 +19,7 @@ blockdiagcontrib-cisco
 git+https://github.com/pygobject/pycairo.git@v1.13.3
 cairosvg==1.0.22
 sqlalchemy-migrate
-Trac==1.2.2
+git+https://github.com/t-kenji/trac.git@1.2.2-stable
 git+https://github.com/t-kenji/trac-account-manager-plugin.git@0.5-dev
 git+https://github.com/t-kenji/trac-advanced-ticket-workflow-plugin.git
 git+https://github.com/t-kenji/trac-archive-viewer-plugin.git
