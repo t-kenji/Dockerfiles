@@ -49,13 +49,13 @@ WORKDIR $HOME
 COPY script/docker-entrypoint.sh /
 
 # Setup janus-gateway.
-RUN git clone --depth=1 -b v1.2 https://github.com/xiph/opus.git && \
+RUN git clone --depth=1 -b v1.2.1 https://github.com/xiph/opus.git && \
     cd opus && \
     ./autogen.sh && \
     ./configure --prefix=/usr && \
     make install
-RUN curl -L https://github.com/cisco/libsrtp/archive/v2.0.0.tar.gz | tar zx && \
-    cd libsrtp-2.0.0 && \
+RUN git clone --depth=1 -b v2.1.0 https://github.com/cisco/libsrtp.git && \
+    cd libsrtp && \
     ./configure --prefix=/usr --enable-openssl && \
     make shared_library && \
     make install
@@ -65,13 +65,13 @@ RUN git clone --depth=1 https://github.com/sctplab/usrsctp && \
     cd workbench && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \
     cmake --build . --target install
-RUN git clone --depth=1 -b v2.2.1 https://github.com/warmcat/libwebsockets.git && \
+RUN git clone --depth=1 -b v2.3.0 https://github.com/warmcat/libwebsockets.git && \
     cd libwebsockets && \
     mkdir workbench && \
     cd workbench && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" .. && \
     cmake --build . --target install
-RUN git clone --depth=1 https://github.com/eclipse/paho.mqtt.c.git && \
+RUN git clone --depth=1 -b v1.2.0 https://github.com/eclipse/paho.mqtt.c.git && \
     cd paho.mqtt.c && \
     mkdir workbench && \
     cd workbench && \
@@ -83,14 +83,14 @@ RUN git clone --depth=1 -b v0.8.0 https://github.com/alanxz/rabbitmq-c.git && \
     cd workbench && \
     cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .. && \
     cmake --build . --config Release --target install
-RUN git clone --depth=1 -b v0.2.3 https://github.com/t-kenji/janus-gateway.git && \
+RUN git clone --depth=1 -b v0.2.4 https://github.com/t-kenji/janus-gateway.git && \
     cd janus-gateway && \
     ./autogen.sh && \
     LIBS="-lpthread" ./configure --prefix=/usr && \
     make && \
     make install && \
     make configs
-COPY conf/janus/*.cfg /usr/etc/janus
+COPY conf/janus/*.cfg /usr/etc/janus/
 
 # Setup supervisor
 COPY conf/supervisor/*.conf /etc/supervisor/conf.d/
