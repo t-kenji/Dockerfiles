@@ -48,7 +48,7 @@ COPY script/docker-entrypoint.sh /
 WORKDIR $HOME
 
 # Setup kallithea
-COPY conf/venv/requirements.txt ./
+COPY conf/kallithea/requirements.txt ./
 RUN virtualenv --no-site-packages ./venv && \
     ./venv/bin/pip install -r ./requirements.txt && \
     /bin/echo -e "\
@@ -59,7 +59,6 @@ except ImportError:\n\
 else:\n\
 	sys.setdefaultencoding('utf-8')\n\
 " >> ./venv/lib/python2.7/sitecustomize.py
-RUN git clone https://github.com/t-kenji/kallithea-rcextensions.git
 
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d

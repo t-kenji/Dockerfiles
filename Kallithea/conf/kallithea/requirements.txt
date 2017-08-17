@@ -1,0 +1,7 @@
+setuptools==33.1.1
+Babel==1.3
+psycopg2
+requests
+sqlalchemy-migrate
+git+https://github.com/t-kenji/kallithea-mirror.git@hotfix/missing-file
+git+https://github.com/t-kenji/kallithea-pullrequest-comments-download-extension.git

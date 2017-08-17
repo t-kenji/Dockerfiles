@@ -3,7 +3,7 @@
 #
 
 # Pull base image.
-FROM jenkins:2.46.3-alpine
+FROM jenkins:2.60.2-alpine
 
 # Author.
 MAINTAINER tkenji <protect.2501@gmail.com>
