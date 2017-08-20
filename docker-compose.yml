@@ -16,12 +16,25 @@ services:
         volumes:
             - ~/.docker-containers/volumes/mongodb/data:/data
 
+    # Lets-chat
+    letschat:
+        build: ./Letschat
+        image: biotop/letschat
+        ports:
+            - "5000:5000"
+        depends_on:
+            - mongodb
+        environment:
+            - LETSCHAT_XMPP_DOMAIN=example.com
+            - LETSCHAT_AVATAR_PROVIDER=http://192.168.11.3/trac/trac-plugin-test/avatar
+
     # Kallithea
     kallithea:
         build: ./Kallithea
         image: biotop/kallithea
-        links:
-            - postgres:db
+        depends_on:
+            - postgres
+            - letschat
         volumes:
             - ~/.docker-containers/volumes/kallithea/data:/var/lib/kallithea/data
             - ~/.docker-containers/volumes/kallithea/repos:/var/lib/kallithea/repos
@@ -29,17 +42,10 @@ services:
             - KALLITHEA_ADMIN_USER=admin
             - KALLITHEA_ADMIN_PASS=admin0
             - KALLITHEA_ADMIN_EMAIL=admin@email.com
-
-    # Lets-chat
-    letschat:
-        build: ./Letschat
-        image: biotop/letschat
-        ports:
-            - "5000:5000"
-        links:
-            - mongodb:db
-        environment:
-            - AVATAR_PROVIDER=http://192.168.11.3/trac/trac-plugin-test/avatar
+            - KALLITHEA_LCB_HOSTNAME=letschat
+            - KALLITHEA_LCB_PORT=5000
+            - KALLITHEA_LCB_TOKEN=
+            - KALLITHEA_LCB_ROOMS=
 
     # Jenkins slave (program #1)
     jenkins-slave-program-1:
@@ -52,8 +58,8 @@ services:
     jenkins-master:
         build: ./Jenkins-master
         image: biotop/jenkins-master
-        links:
-            - jenkins-slave-program-1:slave-program-1
+        depends_on:
+            - jenkins-slave-program-1
         volumes:
             - ~/.docker-containers/volumes/jenkins-master/jenkins_home:/var/jenkins_home
 
@@ -68,9 +74,18 @@ services:
     trac:
         build: ./Trac
         image: biotop/trac
+        depends_on:
+            - letschat
         volumes:
             - ~/.docker-containers/volumes/trac/data:/var/lib/trac
+            - ~/.docker-containers/volumes/nginx/www-data:/usr/share/www-data
         environment:
+            - TRAC_LCB_HOSTNAME=letschat
+            - TRAC_LCB_PORT=5000
+            - TRAC_LCB_TOKEN=
+            - TRAC_LCB_BLOG_ROOM=blog
+            - TRAC_LCB_TICKET_ROOM=ticket
+            - TRAC_LCB_WIKI_ROOM=wiki
             - REVERSE_PROXY=192.168.11.3
             - TRAC_PROJECT_NAME=trac-project-sample
 
@@ -78,14 +93,15 @@ services:
     errbot:
         build: ./Errbot
         image: biotop/errbot
-        links:
-            - letschat:letschat
+        depends_on:
+            - letschat
         volumes:
             - ~/.docker-containers/volumes/errbot/data:/var/lib/errbot/data
+            - ~/.docker-containers/volumes/errbot/plugins:/var/lib/errbot/plugins
         environment:
             - ERRBOT_LCB_HOSTNAME=letschat
-            - ERRBOT_LCB_TOKEN=YOUR_TOKEN
-            - ERRBOT_LCB_ROOMS=YOUR_ROOMS
+            - ERRBOT_LCB_TOKEN=
+            - ERRBOT_LCB_ROOMS=
             - ERRBOT_LCB_ADMINS=@ktakahashi
             - ERRBOT_LCB_NAME=errbot
 
@@ -98,12 +114,12 @@ services:
             - "443:443"
             - "8089:8089"
             - "8989:8989"
-        links:
-            - trac:trac
-            - kallithea:kallithea
-            - letschat:letschat
-            - jenkins-master:jenkins
-            - janus:janus
+        depends_on:
+            - trac
+            - kallithea
+            - letschat
+            - jenkins-master
+            - janus
         volumes:
             - ~/.docker-containers/volumes/certs:/usr/share/certs
             - ~/.docker-containers/volumes/nginx/www-data:/usr/share/www-data

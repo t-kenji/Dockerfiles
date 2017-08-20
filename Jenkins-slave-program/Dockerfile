@@ -84,8 +84,9 @@ RUN mkdir /var/lib/jenkins && \
     chown $USER:$USER /var/lib/jenkins
 
 # Setup sshd.
-RUN sed -i -e 's/#AuthorizedKeysFile/AuthorizedKeysFile/g' /etc/ssh/sshd_config
-RUN sed -i -e 's/#PasswordAuthentication\s+yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+RUN sed -i -e 's/#AuthorizedKeysFile/AuthorizedKeysFile/g' \
+           -e 's/#PasswordAuthentication\s+yes/PasswordAuthentication no/g' \
+           /etc/ssh/sshd_config
 RUN mkdir -p /var/run/sshd
 
 WORKDIR $HOME

@@ -14,16 +14,15 @@ ENV LANG=C.UTF-8
 
 # Install packages.
 RUN apk update
-RUN apk add --no-cache \
-            curl \
+RUN apk add --no-cache --virtual .letschat-rundeps \
             git \
-            git-svn \
             logrotate \
             supervisor \
             $NULL
 RUN apk add --no-cache \
             vim \
             bash \
+            less \
             $NULL
 
 # Define working directory.
@@ -42,7 +41,7 @@ COPY conf/supervisor/letschat.ini /etc/supervisor.d/
 COPY script/docker-entrypoint.sh /
 
 # Port forwarding target.
-EXPOSE 5000
+EXPOSE 5000 5222
 
 # Define default command.
 ENTRYPOINT ["/docker-entrypoint.sh"]

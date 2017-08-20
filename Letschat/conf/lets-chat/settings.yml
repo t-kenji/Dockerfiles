@@ -27,18 +27,20 @@ files:
 xmpp:
   enable: true
   port: 5222
-  domain: example.com
+  domain: YOUR_XMPP_DOMAIN
 
 database:
-  uri: mongodb://db/letschat
+  uri: mongodb://mongodb/letschat
 
 secrets:
   cookie: secretsauce
 
 auth:
-  providers: [local]
+  providers: [reverseproxy, local]
   local:
     enableRegistration: true
+  reverseproxy:
+    userHeader: 'X-Forwarded-User'
 
 giphy:
   enable: false

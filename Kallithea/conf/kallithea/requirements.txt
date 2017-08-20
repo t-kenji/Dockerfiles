@@ -1,6 +1,8 @@
 setuptools==33.1.1
 Babel==1.3
 psycopg2
+openpyxl
 requests
 sqlalchemy-migrate
 git+https://github.com/t-kenji/kallithea-mirror.git@0.3.3-stable
+git+https://github.com/t-kenji/kallithea-pullrequest-comments-download-extension.git
