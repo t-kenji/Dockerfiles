@@ -17,7 +17,21 @@ ENV TRACDATA=/var/lib/trac
 VOLUME $TRACDATA
 
 # Install packages.
-RUN apk add --no-cache \
+RUN apk update
+RUN apk add --no-cache --virtual .trac-rundeps \
+            cairo \
+            libffi \
+            libjpeg-turbo \
+            libpng \
+            logrotate \
+            postgresql-libs \
+            sqlite \
+            supervisor \
+            tzdata \
+            zlib \
+            $NULL
+RUN apk add --no-cache --virtual .trac-builddeps \
+            build-base \
             cairo-dev \
             curl \
             gcc \
@@ -46,22 +60,27 @@ RUN pip install --no-cache-dir \
 # Define working directory.
 WORKDIR $HOME
 
+# Setup timezone.
+RUN rm /etc/localtime \
+ && ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && echo "Asia/Tokyo" > /etc/timezone
+
 # Setup trac.
 COPY script/bootstrap.py $HOME/
 COPY conf/trac/trac.ini.template $HOME/
 COPY conf/trac/requirements.txt $HOME/
-RUN virtualenv --no-site-packages ./venv && \
-    /bin/echo -e "\
+RUN virtualenv --no-site-packages ./venv \
+ && ./venv/bin/pip install --upgrade pip \
+ && ./venv/bin/pip install setuptools==33.1.1 \
+ && ./venv/bin/pip install -r $HOME/requirements.txt \
+ && /bin/echo -e "\
 try:\n\
     import sys\n\
 except ImportError:\n\
     pass\n\
 else:\n\
     sys.setdefaultencoding('utf-8')\n\
-" >> ./venv/lib/python2.7/sitecustomize.py && \
-    ./venv/bin/pip install --upgrade pip && \
-    ./venv/bin/pip install setuptools==33.1.1 && \
-    ./venv/bin/pip install -r requirements.txt
+" >> ./venv/lib/python2.7/sitecustomize.py
 
 # Setup supervisor
 RUN mkdir -p /etc/supervisor.d

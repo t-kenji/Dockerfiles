@@ -1,0 +1,125 @@
+version: '2'
+
+services:
+
+    # Postgres
+    postgres:
+        build: ./Postgres
+        image: biotop/postgres
+        volumes:
+            - /YOUR_VOLUMES/postgres/data:/var/lib/postgresql/data
+
+    # MongoDB
+    mongodb:
+        build: ./MongoDB
+        image: biotop/mongodb
+        volumes:
+            - /YOUR_VOLUMES/mongodb/data:/data
+
+    # Lets-chat
+    letschat:
+        build: ./Letschat
+        image: biotop/letschat
+        ports:
+            - "5000:5000"
+            - "5222:5222"
+        depends_on:
+            - mongodb
+        environment:
+            - LETSCHAT_XMPP_DOMAIN=YOUR_XMPP_DOMAIN
+            - LETSCHAT_AVATAR_PROVIDER=YOUR_AVATAR_PROVIDER_URI
+
+    # Kallithea
+    kallithea:
+        build: ./Kallithea
+        image: biotop/kallithea
+        links:
+            - postgres:db
+        volumes:
+            - /YOUR_VOLUMES/kallithea/data:/var/lib/kallithea/data
+            - /YOUR_VOLUMES/kallithea/repos:/var/lib/kallithea/repos
+        environment:
+            - KALLITHEA_ADMIN_USER=YOUR_ADMIN_USER
+            - KALLITHEA_ADMIN_PASS=YOUR_ADMIN_PASS
+            - KALLITHEA_ADMIN_EMAIL=YOUR_ADMIN_EMAIL
+            - KALLITHEA_LCB_HOSTNAME=letschat
+            - KALLITHEA_LCB_PORT=5000
+            - KALLITHEA_LCB_TOKEN=YOUR_LCB_TOKEN
+            - KALLITHEA_LCB_ROOMS=YOUR_LCB_ROOMS
+
+    # Jenkins slave (program #1)
+    jenkins-slave-program-1:
+        build: ./Jenkins-slave-program
+        image: biotop/jenkins-slave-program
+        volumes:
+            - /YOUR_VOLUMES/jenkins-slave-program-1/ssh:/home/jenkins/.ssh
+
+    # Jenkins master
+    jenkins-master:
+        build: ./Jenkins-master
+        image: biotop/jenkins-master
+        links:
+            - jenkins-slave-program-1:slave-program-1
+        volumes:
+            - /YOUR_VOLUMES/jenkins-master/jenkins_home:/var/jenkins_home
+
+    # Janus-gateway
+    janus:
+        build: ./Janus
+        image: biotop/janus
+        volumes:
+            - /YOUR_VOLUMES/certs:/usr/share/certs
+
+    # Trac
+    trac:
+        build: ./Trac
+        image: biotop/trac
+        volumes:
+            - ~/.docker-containers/volumes/trac/data:/var/lib/trac
+            - ~/.docker-containers/volumes/nginx/www-data:/usr/share/www-data
+            - /YOUR_VOLUMES/trac/data:/var/lib/trac
+            - /YOUR_VOLUMES/nginx/www-data:/usr/share/www-data
+        environment:
+            - TRAC_LCB_HOSTNAME=letschat
+            - TRAC_LCB_PORT=5000
+            - TRAC_LCB_TOKEN=YOUR_LCB_TOKEN
+            - TRAC_LCB_BLOG_ROOM=YOUR_LCB_ROOM
+            - TRAC_LCB_TICKET_ROOM=YOUR_LCB_ROOM
+            - TRAC_LCB_WIKI_ROOM=YOUR_LCB_ROOM
+            - REVERSE_PROXY=YOUR_REVERSE_PROXY_HOST
+            - TRAC_PROJECT_NAME=trac-project-sample
+
+    # Errbot
+    errbot:
+        build: ./Errbot
+        image: biotop/errbot
+        links:
+            - letschat:letschat
+        volumes:
+            - /YOUR_VOLUMES/errbot/data:/var/lib/errbot/data
+            - /YOUR_VOLUMES/errbot/plugins:/var/lib/errbot/plugins
+        environment:
+            - ERRBOT_LCB_HOSTNAME=letschat
+            - ERRBOT_LCB_TOKEN=YOUR_LCB_TOKEN
+            - ERRBOT_LCB_ROOMS=YOUR_LCB_ROOMS
+            - ERRBOT_LCB_ADMINS=@YOUR_ADMIN_NAME
+            - ERRBOT_LCB_NAME=errbot
+
+    # Reverse-proxy
+    nginx:
+        build: ./Nginx
+        image: biotop/nginx
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8089:8089"
+            - "8989:8989"
+        links:
+            - trac:trac
+            - kallithea:kallithea
+            - letschat:letschat
+            - jenkins-master:jenkins
+            - janus:janus
+        volumes:
+            - /YOUR_VOLUMES/certs:/usr/share/certs
+            - /YOUR_VOLUMES/nginx/www-data:/usr/share/www-data

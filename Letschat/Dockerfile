@@ -20,6 +20,7 @@ RUN apk add --no-cache \
             git-svn \
             logrotate \
             supervisor \
+            tzdata \
             $NULL
 RUN apk add --no-cache \
             vim \
@@ -28,6 +29,11 @@ RUN apk add --no-cache \
 
 # Define working directory.
 WORKDIR $HOME
+
+# Setup timezone.
+RUN rm /etc/localtime \
+ && ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && echo "Asia/Tokyo" > /etc/timezone
 
 # Setup lets-chat
 RUN git clone -b aim-for-stable https://github.com/t-kenji/lets-chat.git && \
