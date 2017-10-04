@@ -17,6 +17,7 @@ ENV TRACDATA=/var/lib/trac
 VOLUME $TRACDATA
 
 # Install packages.
+RUN apk update
 RUN apk add --no-cache --virtual .trac-rundeps \
             cairo \
             libffi \
@@ -26,6 +27,7 @@ RUN apk add --no-cache --virtual .trac-rundeps \
             postgresql-libs \
             sqlite \
             supervisor \
+            tzdata \
             zlib \
             $NULL
 RUN apk add --no-cache --virtual .trac-builddeps \
@@ -51,15 +53,20 @@ RUN pip install --no-cache-dir \
 # Define working directory.
 WORKDIR $HOME
 
+# Setup timezone.
+RUN rm /etc/localtime \
+ && ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && echo "Asia/Tokyo" > /etc/timezone
+
 # Setup trac.
 COPY script/bootstrap.py $HOME/
 COPY conf/trac/trac.ini.template $HOME/
 COPY conf/trac/requirements.txt $HOME/
 RUN virtualenv --no-site-packages ./venv \
-    && ./venv/bin/pip install --upgrade pip \
-    && ./venv/bin/pip install setuptools==33.1.1 \
-    && ./venv/bin/pip install -r $HOME/requirements.txt \
-    && /bin/echo -e "\
+ && ./venv/bin/pip install --upgrade pip \
+ && ./venv/bin/pip install setuptools==33.1.1 \
+ && ./venv/bin/pip install -r $HOME/requirements.txt \
+ && /bin/echo -e "\
 try:\n\
     import sys\n\
 except ImportError:\n\

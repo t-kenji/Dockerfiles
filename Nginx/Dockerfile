@@ -25,6 +25,7 @@ RUN apk add --no-cache --virtual .nginx-rundeps \
             libaio \
             libressl \
             pcre \
+            tzdata \
             zlib \
             $NULL
 RUN apk add --no-cache --virtual .nginx-builddeps \
@@ -44,7 +45,10 @@ RUN apk add --no-cache \
 # Define working directory.
 WORKDIR $HOME
 
-COPY script/docker-entrypoint.sh /
+# Setup timezone.
+RUN rm /etc/localtime \
+ && ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && echo "Asia/Tokyo" > /etc/timezone
 
 # Setup nginx.
 RUN git clone https://github.com/atomx/nginx-http-auth-digest.git
@@ -87,6 +91,8 @@ RUN git clone -b release-1.13.4 https://github.com/nginx/nginx.git \
 
 COPY conf/nginx/nginx.conf /etc/nginx/
 COPY conf/nginx/conf.d/*.conf /etc/nginx/conf.d/
+
+COPY script/docker-entrypoint.sh /
 
 # Port forwarding target.
 EXPOSE 80 443 8089 8989

@@ -24,6 +24,7 @@ RUN apk add --no-cache --virtual .errbot-rundeps \
             libffi \
             openssl \
             supervisor \
+            tzdata \
             $NULL
 RUN apk add --no-cache --virtual .errbot-builddeps \
             gcc \
@@ -41,7 +42,10 @@ RUN apk add --no-cache \
 # Define working directory.
 WORKDIR $HOME
 
-COPY script/docker-entrypoint.sh /
+# Setup timezone.
+RUN rm /etc/localtime \
+ && ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && echo "Asia/Tokyo" > /etc/timezone
 
 # Setup errbot.
 COPY conf/errbot/requirements.txt $HOME/
@@ -54,6 +58,8 @@ RUN git clone https://github.com/t-kenji/errbot-moogle.git \
 RUN mkdir -p /etc/supervisor.d
 COPY conf/supervisor/errbot.ini /etc/supervisor.d/
 COPY conf/logrotate/supervisor /etc/logrotate.d/
+
+COPY script/docker-entrypoint.sh /
 
 # Define default command.
 ENTRYPOINT ["/docker-entrypoint.sh"]

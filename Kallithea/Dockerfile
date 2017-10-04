@@ -28,6 +28,7 @@ RUN apk add --no-cache --virtual .kallithea-rundeps \
             postgresql-libs \
             postgresql-client \
             supervisor \
+            tzdata \
             $NULL
 RUN apk add --no-cache --virtual .kallithea-builddeps \
             build-base \
@@ -44,10 +45,13 @@ RUN pip install --no-cache-dir \
                 virtualenv \
                 $NULL
 
-COPY script/docker-entrypoint.sh /
-
 # Define working directory.
 WORKDIR $HOME
+
+# Setup timezone.
+RUN rm /etc/localtime \
+ && ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && echo "Asia/Tokyo" > /etc/timezone
 
 # Setup kallithea
 COPY conf/kallithea/requirements.txt $HOME/
@@ -68,6 +72,8 @@ RUN git clone https://github.com/t-kenji/kallithea-rcextensions.git $RCDATA/rcex
 RUN mkdir -p /etc/supervisor.d
 COPY conf/supervisor/*.ini /etc/supervisor.d/
 COPY conf/logrotate/supervisor /etc/logrotate.d/
+
+COPY script/docker-entrypoint.sh /
 
 # Port forwarding target.
 EXPOSE 5010

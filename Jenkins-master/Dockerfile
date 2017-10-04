@@ -3,7 +3,7 @@
 #
 
 # Pull base image.
-FROM jenkins:2.60.2-alpine
+FROM jenkins:2.60.3-alpine
 
 # Author.
 MAINTAINER tkenji <protect.2501@gmail.com>
@@ -19,17 +19,24 @@ VOLUME $JENKINS_HOME
 
 # Install packages.
 RUN apk update
-RUN apk add --no-cache \
+RUN apk add --no-cache --virtual .jenkins-rundeps \
             curl \
             logrotate \
             supervisor \
+            tzdata \
             $NULL
 RUN apk add --no-cache \
             vim \
             bash \
             $NULL
 
-COPY script/docker-entrypoint.sh /
+# Define working directory.
+WORKDIR $HOME
+
+# Setup timezone.
+RUN rm /etc/localtime \
+ && ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && echo "Asia/Tokyo" > /etc/timezone
 
 # Setup jenkins.
 COPY conf/jenkins/plugins.txt /usr/share/jenkins/ref
@@ -39,6 +46,8 @@ RUN /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt
 RUN mkdir -p /etc/supervisor.d
 COPY conf/supervisor/*.ini /etc/supervisor.d/
 COPY conf/logrotate/supervisor /etc/logrotate.d/
+
+COPY script/docker-entrypoint.sh /
 
 # Port forwarding target.
 EXPOSE 8080
