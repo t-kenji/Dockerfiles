@@ -33,8 +33,9 @@ services:
     kallithea:
         build: ./Kallithea
         image: biotop/kallithea
-        links:
-            - postgres:db
+        depends_on:
+            - postgres
+            - letschat
         volumes:
             - /YOUR_VOLUMES/kallithea/data:/var/lib/kallithea/data
             - /YOUR_VOLUMES/kallithea/repos:/var/lib/kallithea/repos
@@ -58,8 +59,8 @@ services:
     jenkins-master:
         build: ./Jenkins-master
         image: biotop/jenkins-master
-        links:
-            - jenkins-slave-program-1:slave-program-1
+        depends_on:
+            - jenkins-slave-program-1
         volumes:
             - /YOUR_VOLUMES/jenkins-master/jenkins_home:/var/jenkins_home
 
@@ -75,8 +76,6 @@ services:
         build: ./Trac
         image: biotop/trac
         volumes:
-            - ~/.docker-containers/volumes/trac/data:/var/lib/trac
-            - ~/.docker-containers/volumes/nginx/www-data:/usr/share/www-data
             - /YOUR_VOLUMES/trac/data:/var/lib/trac
             - /YOUR_VOLUMES/nginx/www-data:/usr/share/www-data
         environment:
@@ -93,8 +92,8 @@ services:
     errbot:
         build: ./Errbot
         image: biotop/errbot
-        links:
-            - letschat:letschat
+        depends_on:
+            - letschat
         volumes:
             - /YOUR_VOLUMES/errbot/data:/var/lib/errbot/data
             - /YOUR_VOLUMES/errbot/plugins:/var/lib/errbot/plugins
@@ -114,12 +113,12 @@ services:
             - "443:443"
             - "8089:8089"
             - "8989:8989"
-        links:
-            - trac:trac
-            - kallithea:kallithea
-            - letschat:letschat
-            - jenkins-master:jenkins
-            - janus:janus
+        depends_on:
+            - trac
+            - kallithea
+            - letschat
+            - jenkins-master
+            - janus
         volumes:
             - /YOUR_VOLUMES/certs:/usr/share/certs
             - /YOUR_VOLUMES/nginx/www-data:/usr/share/www-data

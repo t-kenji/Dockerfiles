@@ -1,16 +1,19 @@
 #!/bin/bash
 
-sed -i 's/cert_pem = .\+/cert_pem = \/usr\/share\/certs\/cert.crt/' /usr/etc/janus/janus.cfg
-sed -i 's/cert_key = .\+/cert_key = \/usr\/share\/certs\/cert.key/' /usr/etc/janus/janus.cfg
-sed -i 's/^;interface = /interface = /' /usr/etc/janus/janus.transport.http.cfg
-sed -i 's/^https = no/https = yes/' /usr/etc/janus/janus.transport.http.cfg
-sed -i 's/^;secure_port = /secure_port = /' /usr/etc/janus/janus.transport.http.cfg
-sed -i 's/^;secure_interface = /secure_interface = /' /usr/etc/janus/janus.transport.http.cfg
-sed -i 's/cert_pem = .\+/cert_pem = \/usr\/share\/certs\/cert.crt/' /usr/etc/janus/janus.transport.http.cfg
-sed -i 's/cert_key = .\+/cert_key = \/usr\/share\/certs\/cert.key/' /usr/etc/janus/janus.transport.http.cfg
-sed -i 's/^wws = no/wws = yes/' /usr/etc/janus/janus.transport.websockets.cfg
-sed -i 's/^;wss_port = /wss_port = /' /usr/etc/janus/janus.transport.websockets.cfg
-sed -i 's/cert_pem = .\+/cert_pem = \/usr\/share\/certs\/cert.crt/' /usr/etc/janus/janus.transport.websockets.cfg
-sed -i 's/cert_key = .\+/cert_key = \/usr\/share\/certs\/cert.key/' /usr/etc/janus/janus.transport.websockets.cfg
+sed -e 's/cert_pem = .\+/cert_pem = \/usr\/share\/certs\/cert.crt/' \
+    -e 's/cert_key = .\+/cert_key = \/usr\/share\/certs\/cert.key/' \
+    -i /usr/etc/janus/janus.cfg
+sed -e 's/^;interface = /interface = /' \
+    -e 's/^https = no/https = yes/' \
+    -e 's/^;secure_port = /secure_port = /' \
+    -e 's/^;secure_interface = /secure_interface = /' \
+    -e 's/cert_pem = .\+/cert_pem = \/usr\/share\/certs\/cert.crt/' \
+    -e 's/cert_key = .\+/cert_key = \/usr\/share\/certs\/cert.key/' \
+    -i /usr/etc/janus/janus.transport.http.cfg
+sed -e 's/^wws = no/wws = yes/' \
+    -e 's/^;wss_port = /wss_port = /' \
+    -e 's/cert_pem = .\+/cert_pem = \/usr\/share\/certs\/cert.crt/' \
+    -e 's/cert_key = .\+/cert_key = \/usr\/share\/certs\/cert.key/' \
+    -i /usr/etc/janus/janus.transport.websockets.cfg
 
 exec "$@"

@@ -17,7 +17,7 @@ RUN echo 'Asia/Tokyo' > /etc/timezone && \
     dpkg-reconfigure --frontend noninteractive tzdata
 
 # Install packages.
-RUN sed -i -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' /etc/apt/sources.list && \
+RUN sed -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' -i /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y python-software-properties \
                        software-properties-common

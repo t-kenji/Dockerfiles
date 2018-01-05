@@ -20,7 +20,7 @@ RUN echo 'Asia/Tokyo' > /etc/timezone && \
 VOLUME $HOME/.ssh
 
 # Install packages.
-RUN sed -i -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' /etc/apt/sources.list && \
+RUN sed -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' -i /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y python-software-properties \
                        software-properties-common
@@ -84,8 +84,9 @@ RUN mkdir /var/lib/jenkins && \
     chown $USER:$USER /var/lib/jenkins
 
 # Setup sshd.
-RUN sed -i -e 's/#AuthorizedKeysFile/AuthorizedKeysFile/g' /etc/ssh/sshd_config
-RUN sed -i -e 's/#PasswordAuthentication\s+yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+RUN sed -e 's/#AuthorizedKeysFile/AuthorizedKeysFile/g' \
+        -e 's/#PasswordAuthentication\s+yes/PasswordAuthentication no/g' \
+        -i /etc/ssh/sshd_config
 RUN mkdir -p /var/run/sshd
 
 WORKDIR $HOME

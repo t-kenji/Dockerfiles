@@ -1,0 +1,5 @@
+errbot
+socketio-client
+pytz
+crontab
+requests

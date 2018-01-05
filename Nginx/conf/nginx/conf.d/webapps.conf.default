@@ -3,7 +3,7 @@ upstream trac_project_sample {
 }
 
 upstream jenkins {
-    server jenkins:8080;
+    server jenkins-master:8080;
 }
 
 upstream letschat {
@@ -35,19 +35,20 @@ server {
     ssl_certificate     /usr/share/certs/cert.crt;
     ssl_certificate_key /usr/share/certs/cert.key;
 
+    location @trac-project-sample {
+        proxy_set_header X-Real-IP        $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header Front-End-Https  on;
+        proxy_set_header Host             $host;
+        proxy_pass       http://trac_project_sample;
+        proxy_redirect   default;
+    }
+
     location = / {
         root /usr/share/www-data/portal;
         index index.html;
     }
 
-    location @trac-project-sample {
-        proxy_set_header X-Real-IP       $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Front-End-Https on;
-        proxy_set_header Host            $host;
-        proxy_pass       http://trac_project_sample;
-        proxy_redirect   default;
-    }
     location /trac/trac-project-sample {
         alias /usr/share/www-data/trac/trac-project-sample;
         try_files $uri @trac-project-sample;
@@ -76,10 +77,10 @@ server {
 
     location /kallithea {
         add_header       Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-        proxy_set_header X-Real-IP       $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Url-Scheme    https;
-        proxy_set_header Host            $host;
+        proxy_set_header X-Real-IP        $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header X-Url-Scheme     https;
+        proxy_set_header Host             $host;
         proxy_pass       http://kallithea;
         proxy_redirect   default;
     }
@@ -102,5 +103,26 @@ server {
 
     location /janus {
         proxy_pass https://janus:8089;
+    }
+}
+
+server {
+    listen 8989;
+
+    access_log /var/log/nginx/webrtc.access.log main;
+    error_log  /var/log/nginx/webrtc.error.log  info;
+
+    ssl                 on;
+    ssl_certificate     /usr/share/certs/cert.crt;
+    ssl_certificate_key /usr/share/certs/cert.key;
+
+    location / {
+        proxy_pass https://janus:8989;
+        proxy_http_version 1.1;
+        proxy_set_header X-Real-IP       $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host            $host;
+        proxy_set_header Upgrade         $http_upgrade;
+        proxy_set_header Connection      "upgrade";
     }
 }

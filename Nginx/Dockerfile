@@ -11,6 +11,12 @@ MAINTAINER tkenji <protect.2501@gmail.com>
 # Set environment variables.
 ENV HOME=/root
 ENV LANG=C.UTF-8
+ENV CERTDATA=/usr/share/certs
+ENV WWWDATA=/usr/share/www-data
+
+# Set data volume.
+VOLUME $CERTDATA
+VOLUME $WWWDATA
 
 # Install packages.
 RUN apk update
@@ -46,12 +52,13 @@ RUN rm /etc/localtime \
 
 # Setup nginx.
 RUN rm -rf /etc/nginx/conf.d/default.conf
-COPY conf/nginx/*.conf /etc/nginx/conf.d/
+COPY conf/nginx/nginx.conf /etc/nginx/
+COPY conf/nginx/conf.d/*.conf /etc/nginx/conf.d/
 
 COPY script/docker-entrypoint.sh /
 
 # Port forwarding target.
-EXPOSE 80 443 8089 8989
+EXPOSE 80 443 8088 8089 8188 8989
 
 # Define default command.
 ENTRYPOINT ["/docker-entrypoint.sh"]

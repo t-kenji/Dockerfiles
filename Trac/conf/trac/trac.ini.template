@@ -6,8 +6,8 @@ allow_delete_account = enabled
 cookie_refresh_pct = 10
 force_passwd_change = enabled
 generated_password_length = 8
-htdigest_file = /var/lib/trac/sites/YOUR_TRAC_PROJECT/trac.htdigest
-htdigest_realm = Trac
+htdigest_file = /usr/share/www-data/.htdigest
+htdigest_realm = biotop
 login_attempt_max_count = 0
 login_opt_list = disabled
 password_store = HtDigestStore
@@ -18,7 +18,7 @@ reset_password = disabled
 user_lock_max_time = 86400
 user_lock_time = 0
 user_lock_time_progression = 1
-verify_email = False
+verify_email = disabled
 
 [attachment]
 max_size = 262144
@@ -82,7 +82,7 @@ acct_mgr.register.registrationmodule = disabled
 acct_mgr.svnserve.svnservepasswordstore = disabled
 acct_mgr.web_ui.* = enabled
 acct_mgr.web_ui.loginmodule = enabled
-acct_mgr.web_ui.resetpwstore = disabled
+acct_mgr.web_ui.resetpwstore = enabled
 advancedworkflow.controller.ticketworkflowopownercomponent = enabled
 advancedworkflow.controller.ticketworkflowopownerfield = enabled
 advancedworkflow.controller.ticketworkflowopownerprevious = enabled
@@ -230,12 +230,12 @@ audio_rooms = 101,102,103,104,105,106
 video_rooms = 101,102,103,104,105,106
 
 [letschat]
-blog_room = 
+blog_room = YOUR_LETSCHAT_BLOG_ROOM
 ticket_fields = type,priority,component,resolution
-ticket_room = 
-token = 
-webapi = 
-wiki_room = 
+ticket_room = YOUR_LETSCHAT_TICKET_ROOM
+token = YOUR_LETSCHAT_TOKEN
+webapi = http://YOUR_LETSCHAT_HOSTNAME:YOUR_LETSCHAT_PORT/rooms
+wiki_room = YOUR_LETSCHAT_WIKI_ROOM
 
 [logging]
 log_file = trac.log
@@ -418,10 +418,28 @@ restrict_owner = disabled
 workflow = ConfigurableTicketWorkflow,TicketWorkflowOpTriage
 
 [ticket-custom]
+complete = select
+complete.label = Completed [%]
+complete.options = |0|10|20|30|40|50|60|70|80|90|100
+complete.order = 3
+due_assign = time
+due_assign.format = date
+due_assign.label = Start
+due_assign.order = 1
+due_close = time
+due_close.format = date
+due_close.label = End
+due_close.order = 2
 parents = text
 parents.label = Parent Tickets
 refs = text
 refs.label = Reference Tickets
+estimatedhours = text
+estimatedhours.label = Estimated Hours
+estimatedhours.value = 0
+totalhours = text
+totalhours.label = Total Hours
+totalhours.value = 0
 
 [ticket-workflow]
 accept = new,assigned,accepted,reopened -> accepted

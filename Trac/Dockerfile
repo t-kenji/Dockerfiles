@@ -45,7 +45,6 @@ RUN apk add --no-cache --virtual .trac-builddeps \
             mercurial \
             postgresql-dev \
             sqlite-dev \
-            supervisor \
             zlib-dev \
             $NULL
 RUN apk add --no-cache \

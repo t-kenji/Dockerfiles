@@ -16,7 +16,7 @@ RUN echo 'Asia/Tokyo' > /etc/timezone && \
     dpkg-reconfigure --frontend noninteractive tzdata
 
 # Install packages.
-RUN sed -i -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' /etc/apt/sources.list && \
+RUN sed -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' -i /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y python-software-properties \
                        software-properties-common
@@ -76,8 +76,9 @@ RUN mkdir /var/lib/jenkins && \
     chown $USER:$USER /var/lib/jenkins
 
 # Setup sshd.
-RUN sed -i -e 's/#AuthorizedKeysFile/AuthorizedKeysFile/g' /etc/ssh/sshd_config
-RUN sed -i -e 's/#PasswordAuthentication\s+yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+RUN sed -e 's/#AuthorizedKeysFile/AuthorizedKeysFile/g' \
+        -e 's/#PasswordAuthentication\s+yes/PasswordAuthentication no/g' \
+        -i /etc/ssh/sshd_config
 RUN mkdir -p /var/run/sshd
 
 # Install pandoc.
@@ -113,8 +114,9 @@ RUN /opt/venv/sphinx/bin/pip install sphinx
 # Install doxygen.
 RUN curl -L ftp://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.11.linux.bin.tar.gz | tar zx && \
     cd doxygen-1.8.11 && \
-    sed -i '/doxytag/d' Makefile.in && \
-    sed -i '/examples/d' Makefile.in && \
+    sed -e '/doxytag/d' \
+        -e '/examples/d' \
+        -i Makefile.in && \
     ./configure --prefix /opt/toolchain/doxygen && \
     make install && \
     echo 'PATH="/opt/toolchain/doxygen/bin:$PATH"' >> /etc/profile.d/Z99-tools.sh
