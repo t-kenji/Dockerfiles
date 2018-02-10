@@ -1,4 +1,6 @@
-/var/log/*.log {
+/var/log/supervisor/supervisord.log
+/var/log/janus-gateway.log
+{
 	missingok
 	weekly
 	notifempty

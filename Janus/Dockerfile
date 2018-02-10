@@ -19,8 +19,13 @@ RUN sed -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp/g' -i /etc/apt/sources.
  && apt-get install -y python-software-properties \
                        software-properties-common
 RUN apt-get update \
- && apt-get upgrade -y \
- && apt-get install -y curl \
+ && apt-get upgrade -y
+RUN apt-get install -y anacron \
+                       cron \
+                       logrotate \
+                       supervisor \
+                       $NULL
+RUN apt-get install -y curl \
                        git \
                        build-essential \
                        automake \
@@ -35,10 +40,8 @@ RUN apt-get update \
                        libogg-dev \
                        libcurl4-openssl-dev \
                        libtool \
-                       logrotate \
                        openssl \
                        pkg-config \
-                       supervisor \
                        $NULL
 RUN apt-get install -y vim
 
@@ -82,13 +85,16 @@ RUN git clone --depth=1 -b v0.8.0 https://github.com/alanxz/rabbitmq-c.git \
 RUN git clone --depth=1 -b v0.2.6 https://github.com/meetecho/janus-gateway.git \
  && cd janus-gateway \
  && ./autogen.sh \
- && LIBS="-lpthread" ./configure --prefix=/usr \
+ && LIBS="-lpthread" ./configure --prefix=/usr --sysconfdir=/etc \
  && make install \
  && make configs
-COPY conf/janus/*.cfg /usr/etc/janus/
+COPY conf/janus/*.cfg /etc/janus/
 
 # Setup supervisor
 COPY conf/supervisor/*.conf /etc/supervisor/conf.d/
+
+# Setup logrotation
+RUN sed -e 's/^\(su root syslog\)/#\1/' -i /etc/logrotate.conf
 COPY conf/logrotate/supervisor /etc/logrotate.d/
 
 COPY script/docker-entrypoint.sh /
