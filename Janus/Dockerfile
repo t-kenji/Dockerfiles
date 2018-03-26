@@ -70,19 +70,7 @@ RUN git clone --depth=1 -b v2.4.1 https://github.com/warmcat/libwebsockets.git \
  && cd workbench \
  && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_C_FLAGS="-fpic" .. \
  && cmake --build . --target install
-RUN git clone --depth=1 -b v1.2.0 https://github.com/eclipse/paho.mqtt.c.git \
- && cd paho.mqtt.c \
- && mkdir workbench \
- && cd workbench \
- && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DPAHO_WITH_SSL=TRUE .. \
- && cmake --build . --target install
-RUN git clone --depth=1 -b v0.8.0 https://github.com/alanxz/rabbitmq-c.git \
- && cd rabbitmq-c \
- && mkdir workbench \
- && cd workbench \
- && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .. \
- && cmake --build . --config Release --target install
-RUN git clone --depth=1 -b v0.2.6 https://github.com/meetecho/janus-gateway.git \
+RUN git clone --depth=1 -b v0.3.0 https://github.com/meetecho/janus-gateway.git \
  && cd janus-gateway \
  && ./autogen.sh \
  && LIBS="-lpthread" ./configure --prefix=/usr --sysconfdir=/etc \
